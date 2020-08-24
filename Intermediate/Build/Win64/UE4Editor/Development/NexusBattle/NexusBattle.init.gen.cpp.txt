@@ -1,0 +1,3 @@
+D:\Unreal Projects\NexusBattle\Intermediate\Build\Win64\UE4Editor\Development\NexusBattle\Definitions.NexusBattle.h
+D:\Epic Games\UE_4.25\Engine\Source\Runtime\CoreUObject\Public\UObject/GeneratedCppIncludes.h
+D:\Epic Games\UE_4.25\Engine\Source\Runtime\CoreUObject\Public\UObject/MetaData.h

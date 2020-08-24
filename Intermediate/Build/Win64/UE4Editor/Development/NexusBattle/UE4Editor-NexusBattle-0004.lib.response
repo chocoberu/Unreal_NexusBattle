@@ -1,0 +1,22 @@
+/NOLOGO
+/errorReport:prompt
+/MACHINE:x64
+/SUBSYSTEM:WINDOWS
+/DEF
+/NAME:"UE4Editor-NexusBattle-0004.dll"
+/IGNORE:4221
+/NODEFAULTLIB
+"D:\Unreal Projects\NexusBattle\Intermediate\Build\Win64\NexusBattleEditor\Development\Engine\SharedPCH.Engine.ShadowErrors.h.obj"
+"D:\Unreal Projects\NexusBattle\Intermediate\Build\Win64\UE4Editor\Development\NexusBattle\NBGameMode.cpp.obj"
+"D:\Unreal Projects\NexusBattle\Intermediate\Build\Win64\UE4Editor\Development\NexusBattle\NBPlayerController.cpp.obj"
+"D:\Unreal Projects\NexusBattle\Intermediate\Build\Win64\UE4Editor\Development\NexusBattle\NexusBattle.cpp.obj"
+"D:\Unreal Projects\NexusBattle\Intermediate\Build\Win64\UE4Editor\Development\NexusBattle\NexusBattleCharacter.cpp.obj"
+"D:\Unreal Projects\NexusBattle\Intermediate\Build\Win64\UE4Editor\Development\NexusBattle\NexusBattleGameMode.cpp.obj"
+"D:\Unreal Projects\NexusBattle\Intermediate\Build\Win64\UE4Editor\Development\NexusBattle\NBGameMode.gen.cpp.obj"
+"D:\Unreal Projects\NexusBattle\Intermediate\Build\Win64\UE4Editor\Development\NexusBattle\NBPlayerController.gen.cpp.obj"
+"D:\Unreal Projects\NexusBattle\Intermediate\Build\Win64\UE4Editor\Development\NexusBattle\NexusBattle.init.gen.cpp.obj"
+"D:\Unreal Projects\NexusBattle\Intermediate\Build\Win64\UE4Editor\Development\NexusBattle\NexusBattleCharacter.gen.cpp.obj"
+"D:\Unreal Projects\NexusBattle\Intermediate\Build\Win64\UE4Editor\Development\NexusBattle\NexusBattleGameMode.gen.cpp.obj"
+"D:\Unreal Projects\NexusBattle\Intermediate\Build\Win64\UE4Editor\Development\NexusBattle\Default.rc2.res"
+/OUT:"D:\Unreal Projects\NexusBattle\Intermediate\Build\Win64\UE4Editor\Development\NexusBattle\UE4Editor-NexusBattle-0004.lib"
+/INCLUDE:IMPLEMENT_MODULE_NexusBattle

@@ -1,0 +1,14 @@
+{
+	"Targets": [
+		{
+			"Name": "NexusBattle",
+			"Path": "D:\\Unreal Projects\\NexusBattle\\Source\\NexusBattle.Target.cs",
+			"Type": "Game"
+		},
+		{
+			"Name": "NexusBattleEditor",
+			"Path": "D:\\Unreal Projects\\NexusBattle\\Source\\NexusBattleEditor.Target.cs",
+			"Type": "Editor"
+		}
+	]
+}

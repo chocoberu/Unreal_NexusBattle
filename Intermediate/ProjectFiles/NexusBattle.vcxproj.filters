@@ -1,0 +1,69 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <None Include="..\..\NexusBattle.uproject" />
+    <Filter Include="Source">
+      <UniqueIdentifier>{41DABA6E-6D8E-423D-926A-E6DB9C389555}</UniqueIdentifier>
+    </Filter>
+    <None Include="..\..\Source\NexusBattle.Target.cs">
+      <Filter>Source</Filter>
+    </None>
+    <None Include="..\..\Source\NexusBattleEditor.Target.cs">
+      <Filter>Source</Filter>
+    </None>
+    <Filter Include="Config">
+      <UniqueIdentifier>{6D098BEF-F4A9-4807-A4C5-D71E5651588D}</UniqueIdentifier>
+    </Filter>
+    <None Include="..\..\Config\DefaultEditor.ini">
+      <Filter>Config</Filter>
+    </None>
+    <None Include="..\..\Config\DefaultEditorPerProjectUserSettings.ini">
+      <Filter>Config</Filter>
+    </None>
+    <None Include="..\..\Config\DefaultEngine.ini">
+      <Filter>Config</Filter>
+    </None>
+    <None Include="..\..\Config\DefaultGame.ini">
+      <Filter>Config</Filter>
+    </None>
+    <None Include="..\..\Config\DefaultInput.ini">
+      <Filter>Config</Filter>
+    </None>
+    <Filter Include="Source\NexusBattle">
+      <UniqueIdentifier>{A671B6B1-9E04-4ADF-B510-691ACBE537DA}</UniqueIdentifier>
+    </Filter>
+    <ClCompile Include="..\..\Source\NexusBattle\NBGameMode.cpp">
+      <Filter>Source\NexusBattle</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\NexusBattle\NBGameMode.h">
+      <Filter>Source\NexusBattle</Filter>
+    </ClInclude>
+    <ClCompile Include="..\..\Source\NexusBattle\NBPlayerController.cpp">
+      <Filter>Source\NexusBattle</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\NexusBattle\NBPlayerController.h">
+      <Filter>Source\NexusBattle</Filter>
+    </ClInclude>
+    <None Include="..\..\Source\NexusBattle\NexusBattle.Build.cs">
+      <Filter>Source\NexusBattle</Filter>
+    </None>
+    <ClCompile Include="..\..\Source\NexusBattle\NexusBattle.cpp">
+      <Filter>Source\NexusBattle</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\NexusBattle\NexusBattle.h">
+      <Filter>Source\NexusBattle</Filter>
+    </ClInclude>
+    <ClCompile Include="..\..\Source\NexusBattle\NexusBattleCharacter.cpp">
+      <Filter>Source\NexusBattle</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\NexusBattle\NexusBattleCharacter.h">
+      <Filter>Source\NexusBattle</Filter>
+    </ClInclude>
+    <ClCompile Include="..\..\Source\NexusBattle\NexusBattleGameMode.cpp">
+      <Filter>Source\NexusBattle</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\NexusBattle\NexusBattleGameMode.h">
+      <Filter>Source\NexusBattle</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
