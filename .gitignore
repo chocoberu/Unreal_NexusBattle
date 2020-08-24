@@ -338,3 +338,13 @@ ASALocalRun/
 
 # BeatPulse healthcheck temp database
 healthchecksdb
+
+# Unreal 
+/Saved
+/Intermediate
+/.vs
+/Binaries
+/Build
+/Plugins
+*.sln
+*_BuiltData.uasset
