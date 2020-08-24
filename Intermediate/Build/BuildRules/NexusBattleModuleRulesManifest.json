@@ -1,8 +1,0 @@
-{
-	"SourceFiles": [
-		"D:\\Unreal Projects\\NexusBattle\\Source\\NexusBattle\\NexusBattle.Build.cs",
-		"D:\\Unreal Projects\\NexusBattle\\Source\\NexusBattle.Target.cs",
-		"D:\\Unreal Projects\\NexusBattle\\Source\\NexusBattleEditor.Target.cs"
-	],
-	"EngineVersion": "4.25.3"
-}
