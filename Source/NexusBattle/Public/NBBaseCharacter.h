@@ -39,6 +39,8 @@ protected:
 	UPROPERTY(VisibleAnywhere, Category = Camera) USpringArmComponent* SpringArm;
 	UPROPERTY(VisibleAnywhere, Category = Camera) UCameraComponent* Camera;
 
+	UPROPERTY() class ANBPlayerController* NBController; // 플레이어 컨트롤러
+
 	// 이동 관련 함수
 	void UpDown(float NewAxisValue);
 	void LeftRight(float NewAxisValue);

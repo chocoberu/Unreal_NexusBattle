@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "NBBaseCharacter.h"
+#include "NBPlayerController.h"
 
 // Sets default values
 ANBBaseCharacter::ANBBaseCharacter()
@@ -35,7 +36,9 @@ ANBBaseCharacter::ANBBaseCharacter()
 void ANBBaseCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-
+	
+	NBController = Cast<ANBPlayerController>(GetController());
+	NBCHECK(NBController != nullptr);
 }
 
 // Called every frame
