@@ -5,5 +5,8 @@
 /Binaries
 /Build
 /Plugins
+
+# except Content
+/Content
 *.sln
 *_BuiltData.uasset
