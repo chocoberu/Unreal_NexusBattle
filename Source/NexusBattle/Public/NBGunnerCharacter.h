@@ -27,6 +27,7 @@ public:
 	virtual void PostInitializeComponents() override;
 
 	void NormalAttack();
+	void RocketDash();
 
 private:
 	UPROPERTY() class UNBGunnerAnimInstance* GunnerAnim; // 애님 인스턴스

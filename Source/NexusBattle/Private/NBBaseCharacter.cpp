@@ -29,7 +29,7 @@ ANBBaseCharacter::ANBBaseCharacter()
 	GetCharacterMovement()->bOrientRotationToMovement = false;
 	GetCharacterMovement()->bUseControllerDesiredRotation = true;
 	GetCharacterMovement()->RotationRate = FRotator(0.0f, 720.0f, 0.0f);
-
+	
 }
 
 // Called when the game starts or when spawned

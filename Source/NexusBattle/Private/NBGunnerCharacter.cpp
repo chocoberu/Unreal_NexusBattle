@@ -23,7 +23,7 @@ ANBGunnerCharacter::ANBGunnerCharacter()
 
 	GetMesh()->SetAnimationMode(EAnimationMode::AnimationBlueprint);
 
-
+	// 파티클 시스템 관련
 	FName MuzzleSocketL(TEXT("Muzzle_02"));
 	FName MuzzleSocketR(TEXT("Muzzle_01"));
 
@@ -60,11 +60,16 @@ void ANBGunnerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
+	// 캐릭터 무브먼트로 속도 테스트
+	GetCharacterMovement()->MaxWalkSpeed = 700.0f;
 }
 
 void ANBGunnerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	// 현재 캐릭터 속도 log
+	//NBLOG(Warning, TEXT("Current Speed : %f"), GetCharacterMovement()->Velocity.Size());
 }
 
 void ANBGunnerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -72,6 +77,7 @@ void ANBGunnerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
 	PlayerInputComponent->BindAction(TEXT("NormalAttack"), EInputEvent::IE_Pressed, this, &ANBGunnerCharacter::NormalAttack);
+	PlayerInputComponent->BindAction(TEXT("Skill1"), EInputEvent::IE_Pressed, this, &ANBGunnerCharacter::RocketDash);
 }
 
 void ANBGunnerCharacter::PostInitializeComponents()
@@ -90,4 +96,15 @@ void ANBGunnerCharacter::NormalAttack()
 	// 파티클 테스트
 	LeftMuzzleParticle->Activate(true);
 	RightMuzzleParticle->Activate(true);
+}
+void ANBGunnerCharacter::RocketDash()
+{
+	// TODO : 모든 방향 적용 필요
+	// TODO : 파티클 시스템 적용
+	// TODO : 점프 개선(순간 속도 등)
+
+	//if (DirectionToMove.X > 0.0f)
+	NBLOG(Warning, TEXT("Call RocketDash"));
+	Jump();
+	GunnerAnim->PlayRocketDashFrontMontage();
 }

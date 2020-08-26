@@ -18,6 +18,7 @@ public:
 	UNBGunnerAnimInstance();
 	virtual void NativeUpdateAnimation(float DeltaSeconds);
 	void PlayNormalAttackMontage();
+	void PlayRocketDashFrontMontage();
 
 	void SetDeadAnim() { IsDead = true; }
 
@@ -25,9 +26,14 @@ private:
 
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
 		UAnimMontage* NAMontage;
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
+		UAnimMontage* RDFrontMontage;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Pawn, Meta = (AllowPrivateAccess = true))
 		bool IsDead;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Pawn, Meta = (AllowPrivateAccess = true))
 		bool IsFire;
 	
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Pawn, Meta = (AllowPrivateAccess = true))
+		float CurrentSpeed;
 };

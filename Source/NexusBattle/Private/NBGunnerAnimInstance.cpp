@@ -13,12 +13,28 @@ UNBGunnerAnimInstance::UNBGunnerAnimInstance()
 		NAMontage = NA_MONTAGE.Object;
 	}
 
+	static ConstructorHelpers::FObjectFinder<UAnimMontage>
+		RDF_MONTAGE(TEXT("/Game/ParagonTwinblast/Characters/Heroes/TwinBlast/RocketDashFront_Montage.RocketDashFront_Montage"));
+
+	if (RDF_MONTAGE.Succeeded())
+	{
+		RDFrontMontage = RDF_MONTAGE.Object;
+	}
+
 	IsDead = false;
 	IsFire = false;
+	CurrentSpeed = 0.0f;
 }
 void UNBGunnerAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 {
 	Super::NativeUpdateAnimation(DeltaSeconds);
+
+	auto Pawn = TryGetPawnOwner();
+	if (::IsValid(Pawn))
+	{
+		CurrentSpeed = Pawn->GetVelocity().Size();
+	}
+	
 }
 
 void UNBGunnerAnimInstance::PlayNormalAttackMontage()
@@ -29,4 +45,10 @@ void UNBGunnerAnimInstance::PlayNormalAttackMontage()
 		Montage_Play(NAMontage, 1.0f);
 		//IsFire = true;
 	}
+}
+
+void UNBGunnerAnimInstance::PlayRocketDashFrontMontage()
+{
+	Montage_Play(RDFrontMontage, 1.0f);
+	NBLOG(Warning, TEXT("RocketDash End"));
 }
