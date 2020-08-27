@@ -31,6 +31,14 @@ public:
 
 private:
 	UPROPERTY() class UNBGunnerAnimInstance* GunnerAnim; // 애님 인스턴스
-	UPROPERTY(VisibleAnywhere, Category = Particle) UParticleSystemComponent* LeftMuzzleParticle; // 총 발사할 때의 파티클 시스템
-	UPROPERTY(VisibleAnywhere, Category = Particle) UParticleSystemComponent* RightMuzzleParticle; // 총 발사할 때의 파티클 시스템
+
+	// 총 발사할 때의 파티클 시스템 (Normal Attack)
+	UPROPERTY(VisibleAnywhere, Category = Particle) UParticleSystemComponent* LeftMuzzleParticle; 
+	UPROPERTY(VisibleAnywhere, Category = Particle) UParticleSystemComponent* RightMuzzleParticle;
+
+	// 로켓 대시 파티클 시스템
+	UPROPERTY(VisibleAnywhere, Category = Particle) UParticleSystemComponent* LeftRocketDashParticle;
+	UPROPERTY(VisibleAnywhere, Category = Particle) UParticleSystemComponent* RightRocketDashParticle;
+
+	// TODO : 캐릭터 상태를 나타낼 enum 추가
 };

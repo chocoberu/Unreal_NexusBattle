@@ -9,6 +9,9 @@ ANBGunnerCharacter::ANBGunnerCharacter()
 	// 컴포넌트 생성
 	LeftMuzzleParticle = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("LMUZZLEPARTICLE"));
 	RightMuzzleParticle = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("RMUZZLEPARTICLE"));
+
+	LeftRocketDashParticle = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("LROCKET_PARTICLE"));
+	RightRocketDashParticle = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("RROCKET_PARTICLE"));
 	
 	GetMesh()->SetRelativeLocationAndRotation(FVector(0.0f, 0.0f, -88.0f), FRotator(0.0f, -90.0f, 0.0f));
 	
@@ -26,9 +29,13 @@ ANBGunnerCharacter::ANBGunnerCharacter()
 	// 파티클 시스템 관련
 	FName MuzzleSocketL(TEXT("Muzzle_02"));
 	FName MuzzleSocketR(TEXT("Muzzle_01"));
+	FName RocketDashL(TEXT("FX_Booster_L_Mid"));
+	FName RocketDashR(TEXT("FX_Booster_R_Mid"));
 
 	LeftMuzzleParticle->SetupAttachment(GetMesh(), MuzzleSocketL);
 	RightMuzzleParticle->SetupAttachment(GetMesh(), MuzzleSocketR);
+	LeftRocketDashParticle->SetupAttachment(GetMesh(), RocketDashL);
+	RightRocketDashParticle->SetupAttachment(GetMesh(), RocketDashR);
 
 	static ConstructorHelpers::FClassFinder<UAnimInstance>
 		GUNNER_ANIM(TEXT("/Game/ParagonTwinblast/Characters/Heroes/TwinBlast/GunnerAnimBlueprint.GunnerAnimBlueprint_C"));
@@ -55,6 +62,17 @@ ANBGunnerCharacter::ANBGunnerCharacter()
 	LeftMuzzleParticle->bAllowRecycling = true;
 	RightMuzzleParticle->bAllowRecycling = true; // Allow Recycling 활성화
 
+	static ConstructorHelpers::FObjectFinder<UParticleSystem>
+		PT_ROCKET_DASH(TEXT("/Game/ParagonTwinblast/FX/Particles/Abilities/Dive/FX/P_DiveBooster_Arms.P_DiveBooster_Arms"));
+
+	if (PT_ROCKET_DASH.Succeeded())
+	{
+		LeftRocketDashParticle->SetTemplate(PT_ROCKET_DASH.Object);
+		RightRocketDashParticle->SetTemplate(PT_ROCKET_DASH.Object);
+	}
+	LeftRocketDashParticle->bAllowRecycling = true;
+	RightRocketDashParticle->bAllowRecycling = true;
+
 }
 void ANBGunnerCharacter::BeginPlay()
 {
@@ -62,6 +80,7 @@ void ANBGunnerCharacter::BeginPlay()
 
 	// 캐릭터 무브먼트로 속도 테스트
 	GetCharacterMovement()->MaxWalkSpeed = 700.0f;
+
 }
 
 void ANBGunnerCharacter::Tick(float DeltaTime)
@@ -100,11 +119,17 @@ void ANBGunnerCharacter::NormalAttack()
 void ANBGunnerCharacter::RocketDash()
 {
 	// TODO : 모든 방향 적용 필요
-	// TODO : 파티클 시스템 적용
+	
 	// TODO : 점프 개선(순간 속도 등)
 
-	//if (DirectionToMove.X > 0.0f)
 	NBLOG(Warning, TEXT("Call RocketDash"));
+
+	// 테스트 코드
+	float Velocity = 750.0f; // 순간 속도
+	GetCharacterMovement()->Velocity = GetActorForwardVector() * Velocity;
 	Jump();
 	GunnerAnim->PlayRocketDashFrontMontage();
+
+	LeftRocketDashParticle->Activate(true);
+	RightRocketDashParticle->Activate(true);
 }
