@@ -6,6 +6,7 @@
 #include "Animation/AnimInstance.h"
 #include "NBGunnerAnimInstance.generated.h"
 
+DECLARE_MULTICAST_DELEGATE(FOnAttackHitCheckDelegate);
 /**
  * 
  */
@@ -22,6 +23,10 @@ public:
 
 	void SetDeadAnim() { IsDead = true; }
 
+	UAnimMontage* GetNormalAttackMontage();
+
+	FOnAttackHitCheckDelegate GetOnAttackHitCheck();
+	FOnAttackHitCheckDelegate OnAttackHitCheck;
 private:
 
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
@@ -36,4 +41,8 @@ private:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Pawn, Meta = (AllowPrivateAccess = true))
 		float CurrentSpeed;
+
+	
+private:
+	UFUNCTION() void AnimNotify_NormalAttackCheck();
 };

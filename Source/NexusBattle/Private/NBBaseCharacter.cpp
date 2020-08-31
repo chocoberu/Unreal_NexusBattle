@@ -2,6 +2,7 @@
 
 #include "NBBaseCharacter.h"
 #include "NBPlayerController.h"
+#include "DrawDebugHelpers.h"
 
 // Sets default values
 ANBBaseCharacter::ANBBaseCharacter()
@@ -30,6 +31,8 @@ ANBBaseCharacter::ANBBaseCharacter()
 	GetCharacterMovement()->bUseControllerDesiredRotation = true;
 	GetCharacterMovement()->RotationRate = FRotator(0.0f, 720.0f, 0.0f);
 	
+	// 콜리전 설정
+	GetCapsuleComponent()->SetCollisionProfileName(TEXT("NBCharacter"));
 }
 
 // Called when the game starts or when spawned

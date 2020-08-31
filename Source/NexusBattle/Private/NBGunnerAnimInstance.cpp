@@ -52,3 +52,18 @@ void UNBGunnerAnimInstance::PlayRocketDashFrontMontage()
 	Montage_Play(RDFrontMontage, 1.0f);
 	NBLOG(Warning, TEXT("RocketDash End"));
 }
+
+UAnimMontage* UNBGunnerAnimInstance::GetNormalAttackMontage()
+{
+	return NAMontage;
+}
+
+FOnAttackHitCheckDelegate UNBGunnerAnimInstance::GetOnAttackHitCheck()
+{
+	return OnAttackHitCheck;
+}
+
+void UNBGunnerAnimInstance::AnimNotify_NormalAttackCheck()
+{
+	OnAttackHitCheck.Broadcast();
+}

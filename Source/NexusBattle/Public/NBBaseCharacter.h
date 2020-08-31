@@ -45,4 +45,7 @@ protected:
 	void UpDown(float NewAxisValue);
 	void LeftRight(float NewAxisValue);
 
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true)) float AttackRange;
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true)) float AttackRadius;
+
 };

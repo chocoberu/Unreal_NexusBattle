@@ -29,6 +29,8 @@ public:
 	void NormalAttack();
 	void RocketDash();
 
+	UFUNCTION() void OnAttackMontageEnded(UAnimMontage* Montage, bool bInterrupted);
+
 private:
 	UPROPERTY() class UNBGunnerAnimInstance* GunnerAnim; // 애님 인스턴스
 
@@ -40,5 +42,12 @@ private:
 	UPROPERTY(VisibleAnywhere, Category = Particle) UParticleSystemComponent* LeftRocketDashParticle;
 	UPROPERTY(VisibleAnywhere, Category = Particle) UParticleSystemComponent* RightRocketDashParticle;
 
+
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true)) bool IsAttacking;
+
 	// TODO : 캐릭터 상태를 나타낼 enum 추가
+
+private:
+	void NormalAttackCheck();
+
 };

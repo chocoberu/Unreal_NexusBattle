@@ -3,6 +3,7 @@
 
 #include "NBGunnerCharacter.h"
 #include "NBGunnerAnimInstance.h"
+#include "DrawDebugHelpers.h"
 
 ANBGunnerCharacter::ANBGunnerCharacter()
 {
@@ -73,6 +74,11 @@ ANBGunnerCharacter::ANBGunnerCharacter()
 	LeftRocketDashParticle->bAllowRecycling = true;
 	RightRocketDashParticle->bAllowRecycling = true;
 
+	IsAttacking = false;
+
+	// 공격 범위
+	AttackRange = 300.0f;
+	AttackRadius = 50.0f;
 }
 void ANBGunnerCharacter::BeginPlay()
 {
@@ -80,7 +86,7 @@ void ANBGunnerCharacter::BeginPlay()
 
 	// 캐릭터 무브먼트로 속도 테스트
 	GetCharacterMovement()->MaxWalkSpeed = 700.0f;
-
+	GetCharacterMovement()->JumpZVelocity = 200.0f;
 }
 
 void ANBGunnerCharacter::Tick(float DeltaTime)
@@ -105,16 +111,23 @@ void ANBGunnerCharacter::PostInitializeComponents()
 
 	GunnerAnim = Cast<UNBGunnerAnimInstance>(GetMesh()->GetAnimInstance());
 	NBCHECK(GunnerAnim != nullptr);
+
+	GunnerAnim->OnMontageEnded.AddDynamic(this, &ANBGunnerCharacter::OnAttackMontageEnded);
+	GunnerAnim->OnAttackHitCheck.AddUObject(this, &ANBGunnerCharacter::NormalAttackCheck);
 }
 
 void ANBGunnerCharacter::NormalAttack()
 {
+	if (IsAttacking)
+		return;
+
 	// TODO
 	GunnerAnim->PlayNormalAttackMontage();
 
 	// 파티클 테스트
 	LeftMuzzleParticle->Activate(true);
 	RightMuzzleParticle->Activate(true);
+	IsAttacking = true;
 }
 void ANBGunnerCharacter::RocketDash()
 {
@@ -125,11 +138,63 @@ void ANBGunnerCharacter::RocketDash()
 	NBLOG(Warning, TEXT("Call RocketDash"));
 
 	// 테스트 코드
-	float Velocity = 750.0f; // 순간 속도
+	float Velocity = 900.0f; // 순간 속도
 	GetCharacterMovement()->Velocity = GetActorForwardVector() * Velocity;
 	Jump();
 	GunnerAnim->PlayRocketDashFrontMontage();
 
 	LeftRocketDashParticle->Activate(true);
 	RightRocketDashParticle->Activate(true);
+}
+
+void ANBGunnerCharacter::OnAttackMontageEnded(UAnimMontage* Montage, bool bInterrupted)
+{
+	if (Montage != GunnerAnim->GetNormalAttackMontage())
+	{
+		NBLOG(Warning, TEXT("Not Normal Attack"));
+		return;
+	}
+	NBCHECK(IsAttacking);
+	IsAttacking = false;
+}
+
+void ANBGunnerCharacter::NormalAttackCheck()
+{
+	NBLOG(Warning, TEXT("NormalAttack Check"));
+	FHitResult HitResult;
+	FCollisionQueryParams Params(NAME_None, false, this);
+	bool bResult = GetWorld()->SweepSingleByChannel(
+		HitResult,
+		GetActorLocation(), // 시작점
+		GetActorLocation() + GetActorForwardVector() * AttackRange, // 끝점
+		FQuat::Identity, // 회전값
+		ECollisionChannel::ECC_GameTraceChannel2, // 트레이스채널
+		FCollisionShape::MakeSphere(AttackRadius),
+		Params);
+
+#if ENABLE_DRAW_DEBUG
+
+	FVector TraceVec = GetActorForwardVector() * AttackRange;
+	FVector Center = GetActorLocation() + TraceVec * 0.5f;
+	float HalfHeight = AttackRange * 0.5f + AttackRadius;
+	FQuat CapsuleRot = FRotationMatrix::MakeFromZ(TraceVec).ToQuat();
+	FColor DrawColor = bResult ? FColor::Green : FColor::Red;
+	float DebugLifeTime = 1.0f;
+
+	DrawDebugCapsule(GetWorld(),
+		Center,
+		HalfHeight,
+		AttackRadius,
+		CapsuleRot,
+		DrawColor,
+		false,
+		DebugLifeTime);
+#endif
+	if (bResult)
+	{
+		if (HitResult.Actor.IsValid())
+		{
+			NBLOG(Warning, TEXT("Hit Actor Name : %s"), *HitResult.Actor->GetName());
+		}
+	}
 }
