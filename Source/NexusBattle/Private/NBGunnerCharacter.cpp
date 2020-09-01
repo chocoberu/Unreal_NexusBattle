@@ -4,6 +4,7 @@
 #include "NBGunnerCharacter.h"
 #include "NBGunnerAnimInstance.h"
 #include "DrawDebugHelpers.h"
+#include "NBCharacterStatComponent.h"
 
 ANBGunnerCharacter::ANBGunnerCharacter()
 {
@@ -38,6 +39,7 @@ ANBGunnerCharacter::ANBGunnerCharacter()
 	LeftRocketDashParticle->SetupAttachment(GetMesh(), RocketDashL);
 	RightRocketDashParticle->SetupAttachment(GetMesh(), RocketDashR);
 
+	// 애님 인스턴스
 	static ConstructorHelpers::FClassFinder<UAnimInstance>
 		GUNNER_ANIM(TEXT("/Game/ParagonTwinblast/Characters/Heroes/TwinBlast/GunnerAnimBlueprint.GunnerAnimBlueprint_C"));
 
@@ -46,6 +48,7 @@ ANBGunnerCharacter::ANBGunnerCharacter()
 		GetMesh()->SetAnimInstanceClass(GUNNER_ANIM.Class);
 	}
 
+	// 파티클 시스템
 	static ConstructorHelpers::FObjectFinder<UParticleSystem>
 		PT_MUZZLE_FLASH_LEFT(TEXT("/Game/ParagonTwinblast/FX/Particles/Abilities/Primary/FX/P_TwinBlast_Primary_MuzzleFlashLeft.P_TwinBlast_Primary_MuzzleFlashLeft"));
 
@@ -87,6 +90,7 @@ void ANBGunnerCharacter::BeginPlay()
 	// 캐릭터 무브먼트로 속도 테스트
 	GetCharacterMovement()->MaxWalkSpeed = 700.0f;
 	GetCharacterMovement()->JumpZVelocity = 200.0f;
+
 }
 
 void ANBGunnerCharacter::Tick(float DeltaTime)
@@ -114,6 +118,13 @@ void ANBGunnerCharacter::PostInitializeComponents()
 
 	GunnerAnim->OnMontageEnded.AddDynamic(this, &ANBGunnerCharacter::OnAttackMontageEnded);
 	GunnerAnim->OnAttackHitCheck.AddUObject(this, &ANBGunnerCharacter::NormalAttackCheck);
+
+	CharacterStat->OnHPIsZero.AddLambda([this]() -> void
+		{
+			NBLOG(Warning, TEXT("Gunner HP is zero"));
+			GunnerAnim->SetDeadAnim();
+			SetActorEnableCollision(false);
+		});
 }
 
 void ANBGunnerCharacter::NormalAttack()
@@ -135,7 +146,7 @@ void ANBGunnerCharacter::RocketDash()
 	
 	// TODO : 점프 개선(순간 속도 등)
 
-	NBLOG(Warning, TEXT("Call RocketDash"));
+	//NBLOG(Warning, TEXT("Call RocketDash"));
 
 	// 테스트 코드
 	float Velocity = 900.0f; // 순간 속도
@@ -151,7 +162,7 @@ void ANBGunnerCharacter::OnAttackMontageEnded(UAnimMontage* Montage, bool bInter
 {
 	if (Montage != GunnerAnim->GetNormalAttackMontage())
 	{
-		NBLOG(Warning, TEXT("Not Normal Attack"));
+		//NBLOG(Warning, TEXT("Not Normal Attack"));
 		return;
 	}
 	NBCHECK(IsAttacking);
@@ -195,6 +206,12 @@ void ANBGunnerCharacter::NormalAttackCheck()
 		if (HitResult.Actor.IsValid())
 		{
 			NBLOG(Warning, TEXT("Hit Actor Name : %s"), *HitResult.Actor->GetName());
+
+			FDamageEvent DamageEvent;
+			HitResult.Actor->TakeDamage(CharacterStat->GetAttack(), // 데미지 크기
+				DamageEvent, // 데미지 종류
+				GetController(), // 가해자 (컨트롤러)
+				this); // 데미지 전달을 위해 사용한 도구 (액터)
 		}
 	}
 }

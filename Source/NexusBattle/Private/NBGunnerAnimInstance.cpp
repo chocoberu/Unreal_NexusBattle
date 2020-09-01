@@ -30,7 +30,10 @@ void UNBGunnerAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 	Super::NativeUpdateAnimation(DeltaSeconds);
 
 	auto Pawn = TryGetPawnOwner();
-	if (::IsValid(Pawn))
+
+	if (!::IsValid(Pawn))
+		return;
+	if (!IsDead)
 	{
 		CurrentSpeed = Pawn->GetVelocity().Size();
 	}
@@ -49,18 +52,14 @@ void UNBGunnerAnimInstance::PlayNormalAttackMontage()
 
 void UNBGunnerAnimInstance::PlayRocketDashFrontMontage()
 {
+	NBCHECK(!IsDead);
 	Montage_Play(RDFrontMontage, 1.0f);
-	NBLOG(Warning, TEXT("RocketDash End"));
+	//NBLOG(Warning, TEXT("RocketDash End"));
 }
 
 UAnimMontage* UNBGunnerAnimInstance::GetNormalAttackMontage()
 {
 	return NAMontage;
-}
-
-FOnAttackHitCheckDelegate UNBGunnerAnimInstance::GetOnAttackHitCheck()
-{
-	return OnAttackHitCheck;
 }
 
 void UNBGunnerAnimInstance::AnimNotify_NormalAttackCheck()

@@ -3,6 +3,7 @@
 #include "NBBaseCharacter.h"
 #include "NBPlayerController.h"
 #include "DrawDebugHelpers.h"
+#include "NBCharacterStatComponent.h"
 
 // Sets default values
 ANBBaseCharacter::ANBBaseCharacter()
@@ -12,6 +13,7 @@ ANBBaseCharacter::ANBBaseCharacter()
 
 	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("SPRINGARM"));
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("CAMERA"));
+	CharacterStat = CreateDefaultSubobject<UNBCharacterStatComponent>(TEXT("CHARACTERSTAT"));
 
 	SpringArm->SetupAttachment(GetCapsuleComponent());
 	Camera->SetupAttachment(SpringArm);
@@ -66,6 +68,18 @@ void ANBBaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 
 	PlayerInputComponent->BindAxis(TEXT("MoveForward"), this, &ANBBaseCharacter::UpDown);
 	PlayerInputComponent->BindAxis(TEXT("MoveRight"), this, &ANBBaseCharacter::LeftRight);
+}
+
+float ANBBaseCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
+{
+	float FinalDamage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
+	// TODO : 방어력에 따라 데미지 계산
+
+	FinalDamage -= CharacterStat->GetDefence();
+	NBLOG(Warning, TEXT("Actor : %s took Damage : %f, CurrentHP : %f"), *GetName(), FinalDamage, CharacterStat->GetCurrentHP());
+
+	CharacterStat->SetDamage(FinalDamage);
+	return FinalDamage;
 }
 
 void ANBBaseCharacter::UpDown(float NewAxisValue)

@@ -25,7 +25,6 @@ public:
 
 	UAnimMontage* GetNormalAttackMontage();
 
-	FOnAttackHitCheckDelegate GetOnAttackHitCheck();
 	FOnAttackHitCheckDelegate OnAttackHitCheck;
 private:
 
@@ -42,7 +41,6 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Pawn, Meta = (AllowPrivateAccess = true))
 		float CurrentSpeed;
 
-	
 private:
 	UFUNCTION() void AnimNotify_NormalAttackCheck();
 };
