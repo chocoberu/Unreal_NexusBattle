@@ -217,6 +217,7 @@ void ANBGunnerCharacter::NormalAttackCheck()
 				DamageEvent, // 데미지 종류
 				GetController(), // 가해자 (컨트롤러)
 				this); // 데미지 전달을 위해 사용한 도구 (액터)
+			// TODO : 타격 파티클 추가
 		}
 	}
 }

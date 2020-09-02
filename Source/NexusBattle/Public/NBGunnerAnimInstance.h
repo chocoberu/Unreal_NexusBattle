@@ -17,7 +17,7 @@ class NEXUSBATTLE_API UNBGunnerAnimInstance : public UAnimInstance
 
 public:
 	UNBGunnerAnimInstance();
-	virtual void NativeUpdateAnimation(float DeltaSeconds);
+	virtual void NativeUpdateAnimation(float DeltaSeconds) override;
 	void PlayNormalAttackMontage();
 	void PlayRocketDashFrontMontage();
 
