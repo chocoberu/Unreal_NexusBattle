@@ -13,10 +13,13 @@ struct FNBCharacterData : public FTableRowBase
 	GENERATED_BODY()
 
 public:
-	FNBCharacterData() : Level(1), MaxHP(100.0f), Attack(10.0f), Defence(5.0f), Speed(700.0f), Skill1(0.0f), Skill2(0.0f), Skill3(0.0f), Skill4(0.0f), DropExp(10), NextExp(30) {}
+	FNBCharacterData() : Level(1), MaxHP(100.0f), MaxMP(100.0f), Attack(10.0f), Defence(5.0f), Speed(700.0f),
+		Skill1(0.0f), Skill2(0.0f), Skill3(0.0f), Skill4(0.0f), Skill1_MP(0.0f), Skill2_MP(0.0f),
+		Skill3_MP(0.0f), Skill4_MP(0.0f), DropExp(10), NextExp(30) {}
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data") int32 Level;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data") float MaxHP;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data") float MaxMP;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data") float Attack;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data") float Defence;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data") float Speed;
@@ -24,6 +27,10 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data") float Skill2;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data") float Skill3;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data") float Skill4;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data") float Skill1_MP;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data") float Skill2_MP;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data") float Skill3_MP;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data") float Skill4_MP;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data") int32 DropExp;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data") int32 NextExp;
 };

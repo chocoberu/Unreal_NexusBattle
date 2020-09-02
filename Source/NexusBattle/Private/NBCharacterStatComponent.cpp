@@ -55,7 +55,10 @@ void UNBCharacterStatComponent::SetNewLevel(int32 NewLevel)
 		if (CurrentStatData != nullptr)
 		{
 			Level = NewLevel;
-			CurrentHP = CurrentStatData->MaxHP;
+			if (Level == 1)
+				SetHP(CurrentStatData->MaxHP);
+			else
+				SetHP(CurrentHP + 10.0f);
 			NBLOG(Warning, TEXT("Gunner Max HP : %f"), CurrentStatData->MaxHP);
 		}
 		else
@@ -64,14 +67,22 @@ void UNBCharacterStatComponent::SetNewLevel(int32 NewLevel)
 	else
 		NBLOG(Error, TEXT("DATA FAILED!!!"));
 }
+void UNBCharacterStatComponent::SetHP(float NewHP)
+{
+	CurrentHP = NewHP;
+	OnHPChanged.Broadcast();
+
+	if (CurrentHP < KINDA_SMALL_NUMBER)
+	{
+		CurrentHP = 0.0f;
+		OnHPIsZero.Broadcast();
+	}
+}
 
 void UNBCharacterStatComponent::SetDamage(float NewDamage)
 {
 	NBCHECK(CurrentStatData != nullptr);
-	CurrentHP = FMath::Clamp<float>(CurrentHP - NewDamage, 0.0f, CurrentStatData->MaxHP);
-
-	if (CurrentHP <= 0.0f)
-		OnHPIsZero.Broadcast();
+	SetHP(FMath::Clamp<float>(CurrentHP - NewDamage, 0.0f, CurrentStatData->MaxHP));
 }
 
 float UNBCharacterStatComponent::GetAttack()
@@ -120,4 +131,11 @@ float UNBCharacterStatComponent::GetCurrentHP()
 {
 	NBCHECK(CurrentStatData != nullptr, 0.0f);
 	return CurrentHP;
+}
+
+float UNBCharacterStatComponent::GetHPRatio()
+{
+	NBCHECK(CurrentStatData != nullptr, 0.0f);
+
+	return (CurrentStatData->MaxHP < KINDA_SMALL_NUMBER) ? 0.0f : (CurrentHP / CurrentStatData->MaxHP);
 }

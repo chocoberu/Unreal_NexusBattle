@@ -7,6 +7,7 @@
 #include "NBCharacterStatComponent.generated.h"
 
 DECLARE_MULTICAST_DELEGATE(FOnHPIsZeroDelegate);
+DECLARE_MULTICAST_DELEGATE(FOnHPChangedDelegate);
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class NEXUSBATTLE_API UNBCharacterStatComponent : public UActorComponent
@@ -28,6 +29,7 @@ public:
 
 	void SetNewLevel(int32 NewLevel);
 	void SetDamage(float NewDamage);
+	void SetHP(float NewHP);
 	float GetAttack();
 	float GetDefence();
 	float GetSpeed();
@@ -37,7 +39,10 @@ public:
 	float GetSkill4();
 	float GetCurrentHP();
 
+	float GetHPRatio();
+
 	FOnHPIsZeroDelegate OnHPIsZero;
+	FOnHPChangedDelegate OnHPChanged;
 
 private:
 	struct FNBCharacterData* CurrentStatData = nullptr;

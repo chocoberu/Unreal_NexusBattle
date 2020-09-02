@@ -5,6 +5,9 @@
 #include "NBGunnerAnimInstance.h"
 #include "DrawDebugHelpers.h"
 #include "NBCharacterStatComponent.h"
+#include "Components/WidgetComponent.h"
+#include "NBCharacterWidget.h"
+#include "NBPlayerController.h"
 
 ANBGunnerCharacter::ANBGunnerCharacter()
 {
@@ -87,10 +90,11 @@ void ANBGunnerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
+	NBLOG(Warning, TEXT("gunner character beginPlay"));
+
 	// 캐릭터 무브먼트로 속도 테스트
 	GetCharacterMovement()->MaxWalkSpeed = 700.0f;
 	GetCharacterMovement()->JumpZVelocity = 200.0f;
-
 }
 
 void ANBGunnerCharacter::Tick(float DeltaTime)
@@ -124,6 +128,7 @@ void ANBGunnerCharacter::PostInitializeComponents()
 			NBLOG(Warning, TEXT("Gunner HP is zero"));
 			GunnerAnim->SetDeadAnim();
 			SetActorEnableCollision(false);
+			HPBarWidget->SetHiddenInGame(true);
 		});
 }
 
