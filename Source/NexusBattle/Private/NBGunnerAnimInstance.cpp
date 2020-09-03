@@ -23,7 +23,6 @@ UNBGunnerAnimInstance::UNBGunnerAnimInstance()
 
 	IsDead = false;
 	IsFire = false;
-	CurrentSpeed = 0.0f;
 }
 void UNBGunnerAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 {
@@ -33,11 +32,6 @@ void UNBGunnerAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 
 	if (!::IsValid(Pawn))
 		return;
-	if (!IsDead)
-	{
-		CurrentSpeed = Pawn->GetVelocity().Size();
-	}
-	
 }
 
 void UNBGunnerAnimInstance::PlayNormalAttackMontage()

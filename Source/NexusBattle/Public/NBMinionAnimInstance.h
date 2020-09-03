@@ -2,10 +2,12 @@
 
 #pragma once
 
-#include "CoreMinimal.h"
+#include "NexusBattle.h"
 #include "Animation/AnimInstance.h"
 #include "NBMinionAnimInstance.generated.h"
 
+DECLARE_MULTICAST_DELEGATE(FOnNextAttackCheckDelegate);
+DECLARE_MULTICAST_DELEGATE(FOnAttackHitCheckDelegate);
 /**
  * 
  */
@@ -21,6 +23,10 @@ public:
 	void PlayNormalAttackMontage();
 	void SetDeadAnim() { IsDead = true; }
 
+	FOnNextAttackCheckDelegate OnNextAttackCheck;
+	FOnAttackHitCheckDelegate OnAttackHitCheck;
+
+	void JumpToAttackMontageSection(int32 NewSection);
 private:
 
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
@@ -29,4 +35,13 @@ private:
 		bool IsDead;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Pawn, Meta = (AllowPrivateAccess = true))
 		bool IsAttack;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Pawn, Meta = (AllowPrivateAccess = true))
+		float CurrentSpeed;
+
+	UFUNCTION()
+		void AnimNotify_AttackCheck();
+	UFUNCTION()
+		void AnimNotify_NextAttackCheck();
+
+	FName GetAttackMontageSectionName(int32 Section);
 };

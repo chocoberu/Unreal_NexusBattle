@@ -3,12 +3,18 @@
 
 #include "NBNormalMinion.h"
 #include "NBMinionAnimInstance.h"
+#include "Components/WidgetComponent.h"
+#include "NBMinionWidget.h"
+#include "NBMinionAIController.h"
 
 // Sets default values
 ANBNormalMinion::ANBNormalMinion()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+
+	HPBarWidget = CreateDefaultSubobject<UWidgetComponent>(TEXT("HPBARWIDGET"));
+	HPBarWidget->SetupAttachment(GetMesh());
 
 	GetMesh()->SetRelativeLocationAndRotation(FVector(0.0f, 0.0f, -88.0f), FRotator(0.0f, -90.0f, 0.0f));
 
@@ -29,12 +35,31 @@ ANBNormalMinion::ANBNormalMinion()
 	{
 		GetMesh()->SetAnimInstanceClass(MINION_ANIM.Class);
 	}
-
 	// 콜리전 설정
 	GetCapsuleComponent()->SetCollisionProfileName(TEXT("NBCharacter"));
 
+	// HP Bar
+	HPBarWidget->SetRelativeLocation(FVector(0.0f, 0.0f, 200.0f));
+	HPBarWidget->SetWidgetSpace(EWidgetSpace::Screen);
+
+	static ConstructorHelpers::FClassFinder<UUserWidget>
+		UI_HUD(TEXT("/Game/UI/UI_HPBar_Minion.UI_HPBar_Minion_C"));
+
+	if (UI_HUD.Succeeded())
+	{
+		HPBarWidget->SetWidgetClass(UI_HUD.Class);
+		HPBarWidget->SetDrawSize(FVector2D(150.0f, 50.0f));
+	}
+
 	// HP
 	CurrentHP = 100.0f;
+
+	IsAttacking = false;
+	MaxCombo = 4;
+	AttackEndComboState();
+
+	AIControllerClass = ANBMinionAIController::StaticClass();
+	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
 }
 
 // Called when the game starts or when spawned
@@ -42,6 +67,13 @@ void ANBNormalMinion::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	auto MinionWidget = Cast<UNBMinionWidget>(HPBarWidget->GetUserWidgetObject());
+	if (MinionWidget != nullptr)
+	{
+		MinionWidget->BindMinion(this);
+	}
+
+	MinionAIController = Cast<ANBMinionAIController>(GetController());
 }
 
 // Called every frame
@@ -49,6 +81,7 @@ void ANBNormalMinion::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	
 }
 
 // Called to bind functionality to input
@@ -64,6 +97,22 @@ void ANBNormalMinion::PostInitializeComponents()
 
 	MinionAnim = Cast<UNBMinionAnimInstance>(GetMesh()->GetAnimInstance());
 
+	MinionAnim->OnMontageEnded.AddDynamic(this, &ANBNormalMinion::OnAttackMontageEnded);
+	MinionAnim->OnNextAttackCheck.AddLambda([this]() -> void {
+		
+		NBLOG(Warning, TEXT("Minion OnNextAttackCheck"));
+		
+		
+		// TODO : 타겟이 존재하면 계속 공격하도록 변경
+		CanNextCombo = true;
+
+		if (IsComboInputOn)
+		{
+			AttackStartComboState();
+			MinionAnim->JumpToAttackMontageSection(CurrentCombo);
+		}
+		});
+	MinionAnim->OnAttackHitCheck.AddUObject(this, &ANBNormalMinion::NormalAttackCheck);
 }
 
 float ANBNormalMinion::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
@@ -73,12 +122,67 @@ float ANBNormalMinion::TakeDamage(float DamageAmount, FDamageEvent const& Damage
 	CurrentHP = FMath::Clamp<float>(CurrentHP - FinalDamage, 0.0f, 100.0f);
 
 	NBLOG(Warning, TEXT("Minion Current HP : %f"), CurrentHP);
+
+	OnHPChanged.Broadcast();
 	// 테스트 코드
-	// TODO : hpbar, 공격 추가
+	// TODO : hpbar, 공격 추가, 팀
 	if (CurrentHP <= 0.0f)
 	{
 		MinionAnim->SetDeadAnim();
 		SetActorEnableCollision(false);
+		HPBarWidget->SetHiddenInGame(true);
+		MinionAIController->StopAI();
 	}
 	return FinalDamage;
+}
+
+float ANBNormalMinion::GetHPRatio()
+{
+	return (CurrentHP < KINDA_SMALL_NUMBER) ? 0.0f : (CurrentHP / MaxHP);
+}
+
+void ANBNormalMinion::NormalAttack()
+{
+	if (IsAttacking)
+	{
+		NBCHECK(FMath::IsWithinInclusive<int32>(CurrentCombo, 1, MaxCombo));
+		if (CanNextCombo)
+			IsComboInputOn = true;
+	}
+	else
+	{
+		NBCHECK(CurrentCombo == 0);
+		AttackStartComboState();
+		MinionAnim->PlayNormalAttackMontage();
+		MinionAnim->JumpToAttackMontageSection(CurrentCombo);
+		IsAttacking = true;
+	}
+}
+
+void ANBNormalMinion::AttackStartComboState()
+{
+	CanNextCombo = true;
+	IsComboInputOn = false;
+	NBCHECK(FMath::IsWithinInclusive<int32>(CurrentCombo, 0, MaxCombo - 1));
+	CurrentCombo = FMath::Clamp<int32>(CurrentCombo + 1, 1, MaxCombo);
+}
+
+void ANBNormalMinion::AttackEndComboState()
+{
+	IsComboInputOn = false;
+	CanNextCombo = false;
+	CurrentCombo = 0;
+}
+
+void ANBNormalMinion::OnAttackMontageEnded(UAnimMontage* Montage, bool bInterrupted)
+{
+	NBCHECK(IsAttacking);
+	NBCHECK(CurrentCombo > 0);
+	IsAttacking = false;
+	AttackEndComboState();
+}
+
+void ANBNormalMinion::NormalAttackCheck()
+{
+	// TODO : 공격 체크 추가
 }

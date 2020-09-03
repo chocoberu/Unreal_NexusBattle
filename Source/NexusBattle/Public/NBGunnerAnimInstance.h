@@ -36,10 +36,6 @@ private:
 		bool IsDead;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Pawn, Meta = (AllowPrivateAccess = true))
 		bool IsFire;
-	
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Pawn, Meta = (AllowPrivateAccess = true))
-		float CurrentSpeed;
 
 private:
 	UFUNCTION() void AnimNotify_NormalAttackCheck();
