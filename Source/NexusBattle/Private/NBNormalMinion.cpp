@@ -6,6 +6,7 @@
 #include "Components/WidgetComponent.h"
 #include "NBMinionWidget.h"
 #include "NBMinionAIController.h"
+#include "DrawDebugHelpers.h"
 
 // Sets default values
 ANBNormalMinion::ANBNormalMinion()
@@ -54,6 +55,8 @@ ANBNormalMinion::ANBNormalMinion()
 	// HP
 	CurrentHP = 100.0f;
 
+	AttackRange = 170.0f;
+	AttackRadius = 50.0f;
 	IsAttacking = false;
 	MaxCombo = 4;
 	AttackEndComboState();
@@ -185,4 +188,49 @@ void ANBNormalMinion::OnAttackMontageEnded(UAnimMontage* Montage, bool bInterrup
 void ANBNormalMinion::NormalAttackCheck()
 {
 	// TODO : 공격 체크 추가
+
+	NBLOG(Warning, TEXT("Minion NormalAttack Check"));
+	FHitResult HitResult;
+	FCollisionQueryParams Params(NAME_None, false, this);
+	bool bResult = GetWorld()->SweepSingleByChannel(
+		HitResult,
+		GetActorLocation(), // 시작점
+		GetActorLocation() + GetActorForwardVector() * AttackRange, // 끝점
+		FQuat::Identity, // 회전값
+		ECollisionChannel::ECC_GameTraceChannel2, // 트레이스채널
+		FCollisionShape::MakeSphere(AttackRadius),
+		Params);
+
+#if ENABLE_DRAW_DEBUG
+
+	FVector TraceVec = GetActorForwardVector() * AttackRange;
+	FVector Center = GetActorLocation() + TraceVec * 0.5f;
+	float HalfHeight = AttackRange * 0.5f + AttackRadius;
+	FQuat CapsuleRot = FRotationMatrix::MakeFromZ(TraceVec).ToQuat();
+	FColor DrawColor = bResult ? FColor::Blue : FColor::Red;
+	float DebugLifeTime = 1.0f;
+
+	DrawDebugCapsule(GetWorld(),
+		Center,
+		HalfHeight,
+		AttackRadius,
+		CapsuleRot,
+		DrawColor,
+		false,
+		DebugLifeTime);
+#endif
+	if (bResult)
+	{
+		if (HitResult.Actor.IsValid())
+		{
+			NBLOG(Warning, TEXT("Hit Actor Name : %s"), *HitResult.Actor->GetName());
+
+			FDamageEvent DamageEvent;
+			HitResult.Actor->TakeDamage(10.0f, // 데미지 크기
+				DamageEvent, // 데미지 종류
+				GetController(), // 가해자 (컨트롤러)
+				this); // 데미지 전달을 위해 사용한 도구 (액터)
+			// TODO : 타격 파티클 추가
+		}
+	}
 }

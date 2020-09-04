@@ -30,16 +30,16 @@ public:
 	void SetNewLevel(int32 NewLevel);
 	void SetDamage(float NewDamage);
 	void SetHP(float NewHP);
-	float GetAttack();
-	float GetDefence();
-	float GetSpeed();
-	float GetSkill1();
-	float GetSkill2();
-	float GetSkill3();
-	float GetSkill4();
-	float GetCurrentHP();
+	float GetAttack() const;
+	float GetDefence() const;
+	float GetSpeed() const;
+	float GetSkill1() const;
+	float GetSkill2() const;
+	float GetSkill3() const;
+	float GetSkill4() const;
+	float GetCurrentHP() const;
 
-	float GetHPRatio();
+	float GetHPRatio() const;
 
 	FOnHPIsZeroDelegate OnHPIsZero;
 	FOnHPChangedDelegate OnHPChanged;

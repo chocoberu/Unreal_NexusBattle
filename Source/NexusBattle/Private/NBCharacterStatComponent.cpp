@@ -85,55 +85,55 @@ void UNBCharacterStatComponent::SetDamage(float NewDamage)
 	SetHP(FMath::Clamp<float>(CurrentHP - NewDamage, 0.0f, CurrentStatData->MaxHP));
 }
 
-float UNBCharacterStatComponent::GetAttack()
+float UNBCharacterStatComponent::GetAttack() const
 {
 	NBCHECK(CurrentStatData != nullptr, 0.0f);
 	return CurrentStatData->Attack;
 }
 
-float UNBCharacterStatComponent::GetDefence()
+float UNBCharacterStatComponent::GetDefence() const
 {
 	NBCHECK(CurrentStatData != nullptr, 0.0f);
 	return CurrentStatData->Defence;
 }
 
-float UNBCharacterStatComponent::GetSpeed()
+float UNBCharacterStatComponent::GetSpeed() const
 {
 	NBCHECK(CurrentStatData != nullptr, 0.0f);
 	return CurrentStatData->Speed;
 }
 
-float UNBCharacterStatComponent::GetSkill1()
+float UNBCharacterStatComponent::GetSkill1() const
 {
 	NBCHECK(CurrentStatData != nullptr, 0.0f);
 	return CurrentStatData->Skill1;
 }
 
-float UNBCharacterStatComponent::GetSkill2()
-{
+float UNBCharacterStatComponent::GetSkill2() const
+{ 
 	NBCHECK(CurrentStatData != nullptr, 0.0f);
 	return CurrentStatData->Skill2;
 }
 
-float UNBCharacterStatComponent::GetSkill3()
+float UNBCharacterStatComponent::GetSkill3() const
 {
 	NBCHECK(CurrentStatData != nullptr, 0.0f);
 	return CurrentStatData->Skill3;
 }
 
-float UNBCharacterStatComponent::GetSkill4()
+float UNBCharacterStatComponent::GetSkill4() const
 {
 	NBCHECK(CurrentStatData != nullptr, 0.0f);
 	return CurrentStatData->Skill4;
 }
 
-float UNBCharacterStatComponent::GetCurrentHP()
+float UNBCharacterStatComponent::GetCurrentHP() const
 {
 	NBCHECK(CurrentStatData != nullptr, 0.0f);
 	return CurrentHP;
 }
 
-float UNBCharacterStatComponent::GetHPRatio()
+float UNBCharacterStatComponent::GetHPRatio() const
 {
 	NBCHECK(CurrentStatData != nullptr, 0.0f);
 
