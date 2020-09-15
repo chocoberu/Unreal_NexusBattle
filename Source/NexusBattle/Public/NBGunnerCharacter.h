@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include "CoreMinimal.h"
+#include "NexusBattle.h"
 #include "NBBaseCharacter.h"
 #include "NBGunnerCharacter.generated.h"
 
