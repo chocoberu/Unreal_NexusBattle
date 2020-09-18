@@ -53,3 +53,13 @@ void ANBMinionAIController::StopAI()
 		BehaviorTreeComponent->StopTree(EBTStopMode::Safe);
 	}
 }
+
+void ANBMinionAIController::SetAttackInstigator(ACharacter* NewInstigator)
+{
+	AttackInstigator = NewInstigator;
+}
+
+ACharacter* ANBMinionAIController::GetAttackInstigator()
+{
+	return AttackInstigator;
+}

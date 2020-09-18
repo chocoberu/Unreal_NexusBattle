@@ -39,28 +39,57 @@ void UBTService_MinionDetect::TickNode(UBehaviorTreeComponent& OwnerComp, uint8*
 		CollisionQueryParam
 	);
 
-
+	ACharacter* CurrentTarget = nullptr;
 	if (bResult)
 	{
-		for (auto& OverlapResult : OverlapResults)
+		//for (auto& OverlapResult : OverlapResults)
+		//{
+		//	// 테스트 코드
+		//	NBLOG(Warning, TEXT("Actor Name : %s"), *OverlapResult.Actor->GetName());
+		//}
+		auto MinionAI = Cast<ANBMinionAIController>(OwnerComp.GetAIOwner());
+		if (MinionAI->GetAttackInstigator() != nullptr) // 타격한 상대를 향해 공격
 		{
-			// 테스트 코드
-			NBLOG(Warning, TEXT("Actor Name : %s"), *OverlapResult.Actor->GetName());
+			NBLOG(Warning, TEXT("Change Attack Target : %s"), *MinionAI->GetName());
+			OwnerComp.GetBlackboardComponent()->SetValueAsObject(ANBMinionAIController::TargetKey, MinionAI->GetAttackInstigator());
+			OwnerComp.GetBlackboardComponent()->SetValueAsVector(ANBMinionAIController::TargetPosKey, MinionAI->GetAttackInstigator()->GetActorLocation());
+			CurrentTarget = MinionAI->GetAttackInstigator();
+
+			DrawDebugSphere(World, Center, DetectRadius, 16, FColor::Green, false, 0.2f);
+			DrawDebugPoint(World, CurrentTarget->GetActorLocation(), 10.0f, FColor::Blue, false, 0.2f);
+			DrawDebugLine(World, ControllingPawn->GetActorLocation(), CurrentTarget->GetActorLocation(), FColor::Blue, false, 0.2f);
+
+			MinionAI->SetAttackInstigator(nullptr);
+			return;
 		}
 		OwnerComp.GetBlackboardComponent()->SetValueAsObject(ANBMinionAIController::TargetPosKey, nullptr);
 		for (auto& OverlapResult : OverlapResults)
 		{
-			ANBBaseCharacter* NBCharacter = Cast<ANBBaseCharacter>(OverlapResult.GetActor());
 			// TODO : 우선순위 적용
+			ACharacter* NBCharacter = Cast<ACharacter>(OverlapResult.GetActor());
+			
 			if (NBCharacter)
 			{
-				OwnerComp.GetBlackboardComponent()->SetValueAsObject(ANBMinionAIController::TargetKey, NBCharacter);
-				DrawDebugSphere(World, Center, DetectRadius, 16, FColor::Green, false, 0.2f);
-				DrawDebugPoint(World, NBCharacter->GetActorLocation(), 10.0f, FColor::Blue, false, 0.2f);
-				DrawDebugLine(World, ControllingPawn->GetActorLocation(), NBCharacter->GetActorLocation(), FColor::Blue, false, 0.2f);
-				return;
+				if (CurrentTarget == nullptr)
+				{
+					CurrentTarget = NBCharacter;
+					OwnerComp.GetBlackboardComponent()->SetValueAsObject(ANBMinionAIController::TargetKey, NBCharacter);
+					OwnerComp.GetBlackboardComponent()->SetValueAsVector(ANBMinionAIController::TargetPosKey, NBCharacter->GetActorLocation());
+					continue;
+				}
+				if ((NBCharacter->GetActorLocation() - Center).Size() < (CurrentTarget->GetActorLocation() - Center).Size())
+				{
+					OwnerComp.GetBlackboardComponent()->SetValueAsObject(ANBMinionAIController::TargetKey, NBCharacter);
+					OwnerComp.GetBlackboardComponent()->SetValueAsVector(ANBMinionAIController::TargetPosKey, NBCharacter->GetActorLocation());
+					CurrentTarget = NBCharacter;
+				}
+				//return;
 			}
 		}
+		NBLOG(Warning, TEXT("Change Attack Target : %s"), *CurrentTarget->GetName());
+		DrawDebugSphere(World, Center, DetectRadius, 16, FColor::Green, false, 0.2f);
+		DrawDebugPoint(World, CurrentTarget->GetActorLocation(), 10.0f, FColor::Blue, false, 0.2f);
+		DrawDebugLine(World, ControllingPawn->GetActorLocation(), CurrentTarget->GetActorLocation(), FColor::Blue, false, 0.2f);
 	}
 	else
 		DrawDebugSphere(World, Center, DetectRadius, 16, FColor::Red, false, 0.2f);

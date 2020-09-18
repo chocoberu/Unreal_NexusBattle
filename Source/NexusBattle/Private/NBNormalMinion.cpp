@@ -63,6 +63,8 @@ ANBNormalMinion::ANBNormalMinion()
 
 	AIControllerClass = ANBMinionAIController::StaticClass();
 	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
+
+	GetCharacterMovement()->MaxWalkSpeed = 300.0f;
 }
 
 // Called when the game starts or when spawned
@@ -125,12 +127,21 @@ float ANBNormalMinion::TakeDamage(float DamageAmount, FDamageEvent const& Damage
 	CurrentHP = FMath::Clamp<float>(CurrentHP - FinalDamage, 0.0f, 100.0f);
 
 	NBLOG(Warning, TEXT("Minion Current HP : %f"), CurrentHP);
-
+	
+	if (MinionAIController != nullptr)
+	{
+		// 타격한 상대를 타겟으로
+		MinionAIController->SetAttackInstigator(EventInstigator->GetCharacter());
+	}
 	OnHPChanged.Broadcast();
 	// 테스트 코드
 	// TODO : hpbar, 공격 추가, 팀
 	if (CurrentHP <= 0.0f)
 	{
+		if (EventInstigator->IsPlayerController())
+		{
+			// TODO : 경험치 관련
+		}
 		MinionAnim->SetDeadAnim();
 		SetActorEnableCollision(false);
 		HPBarWidget->SetHiddenInGame(true);

@@ -25,7 +25,12 @@ public:
 	void RunAI(); // AI 가동
 	void StopAI(); // AI 작동 중단
 
+	void SetAttackInstigator(class ACharacter* NewInstigator);
+	class ACharacter* GetAttackInstigator();
+
 private:
 	UPROPERTY() class UBehaviorTree* BTAsset;
 	UPROPERTY() class UBlackboardData* BBAsset;
+
+	class ACharacter* AttackInstigator;
 };
