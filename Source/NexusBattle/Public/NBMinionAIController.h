@@ -19,6 +19,9 @@ public:
 
 	virtual void OnPossess(APawn* InPawn) override;
 
+	static const FName TargetPosKey;
+	static const FName TargetKey;
+
 	void RunAI(); // AI 가동
 	void StopAI(); // AI 작동 중단
 

@@ -64,4 +64,7 @@ private:
 
 private:
 	void NormalAttackCheck();
+
+	// ÆÀ °ü·Ã
+	Team myteam;
 };

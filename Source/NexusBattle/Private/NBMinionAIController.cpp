@@ -4,6 +4,10 @@
 #include "NBMinionAIController.h"
 #include "BehaviorTree/BehaviorTree.h"
 #include "BehaviorTree/BlackboardData.h"
+#include "BehaviorTree/BlackboardComponent.h"
+
+const FName ANBMinionAIController::TargetPosKey(TEXT("TargetPos"));
+const FName ANBMinionAIController::TargetKey(TEXT("Target"));
 
 ANBMinionAIController::ANBMinionAIController()
 {

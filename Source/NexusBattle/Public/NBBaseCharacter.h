@@ -52,4 +52,7 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, Category = Stat) class UNBCharacterStatComponent* CharacterStat;
 	UPROPERTY(VisibleAnywhere, Category = UI) class UWidgetComponent* HPBarWidget;
+
+	// ÆÀ °ü·Ã
+	Team myteam;
 };
