@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include "CoreMinimal.h"
+#include "NexusBattle.h"
 #include "BehaviorTree/BTTaskNode.h"
 #include "BTTask_MinionAttack.generated.h"
 

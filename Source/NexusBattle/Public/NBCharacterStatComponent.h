@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include "CoreMinimal.h"
+#include "NexusBattle.h"
 #include "Components/ActorComponent.h"
 #include "NBCharacterStatComponent.generated.h"
 

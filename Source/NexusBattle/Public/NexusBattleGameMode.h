@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include "CoreMinimal.h"
+#include "NexusBattle.h"
 #include "GameFramework/GameModeBase.h"
 #include "NexusBattleGameMode.generated.h"
 

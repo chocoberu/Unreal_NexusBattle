@@ -138,14 +138,15 @@ float ANBNormalMinion::TakeDamage(float DamageAmount, FDamageEvent const& Damage
 	// TODO : hpbar, 공격 추가, 팀
 	if (CurrentHP <= 0.0f)
 	{
-		if (EventInstigator->IsPlayerController())
-		{
-			// TODO : 경험치 관련
-		}
+		//if (EventInstigator->IsPlayerController())
+		//{
+		//	// TODO : 경험치 관련
+		//}
+		MinionAIController->StopAI();
 		MinionAnim->SetDeadAnim();
+		GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_None);
 		SetActorEnableCollision(false);
 		HPBarWidget->SetHiddenInGame(true);
-		MinionAIController->StopAI();
 	}
 	return FinalDamage;
 }

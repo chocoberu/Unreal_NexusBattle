@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include "CoreMinimal.h"
+#include "NexusBattle.h"
 #include "BehaviorTree/BTTaskNode.h"
 #include "BTTaskNode_MoveToObejct.generated.h"
 

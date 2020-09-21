@@ -10,9 +10,10 @@ DECLARE_LOG_CATEGORY_EXTERN(NexusBattle, Log, All);
 #define NBLOG(Verbosity, Format, ...) UE_LOG(NexusBattle, Verbosity, TEXT("%s %s"), *NBLOG_CALLINFO, *FString::Printf(Format, ##__VA_ARGS__))
 #define NBCHECK(Expr, ...) { if(!(Expr)) {NBLOG(Error,TEXT("ASSERTION : %s"), TEXT("'"#Expr"'")); return __VA_ARGS__; } }
 
-enum Team
+UENUM()
+enum class Team : uint8
 {
 	Red = 1,
 	Blue = 2,
-	Neutral = 3,
+	Neutral = 3
 };

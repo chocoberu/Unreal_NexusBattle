@@ -27,10 +27,12 @@ public:
 
 	void SetAttackInstigator(class ACharacter* NewInstigator);
 	class ACharacter* GetAttackInstigator();
+	float GetDetectRange() { return DetectRange; }
 
 private:
 	UPROPERTY() class UBehaviorTree* BTAsset;
 	UPROPERTY() class UBlackboardData* BBAsset;
 
 	class ACharacter* AttackInstigator;
+	float DetectRange;
 };

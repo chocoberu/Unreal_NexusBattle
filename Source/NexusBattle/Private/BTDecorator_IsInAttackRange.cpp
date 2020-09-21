@@ -19,10 +19,12 @@ bool UBTDecorator_IsInAttackRange::CalculateRawConditionValue(UBehaviorTreeCompo
     if (ControllingPawn == nullptr)
         return false;
 
+    auto MinionAI = Cast<ANBMinionAIController>(OwnerComp.GetAIOwner());
+
     auto Target = Cast<ACharacter>(OwnerComp.GetBlackboardComponent()->GetValueAsObject(ANBMinionAIController::TargetKey));
     if (Target == nullptr)
         return false;
 
     bResult = (Target->GetDistanceTo(ControllingPawn) <= 150.0f);
-    return bResult;
+        return bResult;
 }

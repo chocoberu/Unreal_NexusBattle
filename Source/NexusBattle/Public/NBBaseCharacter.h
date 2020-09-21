@@ -54,5 +54,6 @@ protected:
 	UPROPERTY(VisibleAnywhere, Category = UI) class UWidgetComponent* HPBarWidget;
 
 	// ÆÀ °ü·Ã
-	Team myteam;
+	UPROPERTY(EditAnywhere, Category = Team)
+		Team myteam;
 };

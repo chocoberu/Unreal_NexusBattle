@@ -66,5 +66,6 @@ private:
 	void NormalAttackCheck();
 
 	// ÆÀ °ü·Ã
-	Team myteam;
+	UPROPERTY(EditAnywhere, Category = Team)
+		Team myteam;
 };

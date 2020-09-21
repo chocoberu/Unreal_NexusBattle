@@ -21,9 +21,14 @@ void UBTService_MinionDetect::TickNode(UBehaviorTreeComponent& OwnerComp, uint8*
 	APawn* ControllingPawn = OwnerComp.GetAIOwner()->GetPawn();
 	if (ControllingPawn == nullptr)
 		return;
+	
+	auto MinionAI = Cast<ANBMinionAIController>(OwnerComp.GetAIOwner());
+	if (MinionAI == nullptr)
+		return;
+
 	UWorld* World = ControllingPawn->GetWorld();
 	FVector Center = ControllingPawn->GetActorLocation();
-	float DetectRadius = 1000.0f;
+	float DetectRadius = MinionAI->GetDetectRange();
 
 	if (World == nullptr)
 		return;
@@ -34,7 +39,7 @@ void UBTService_MinionDetect::TickNode(UBehaviorTreeComponent& OwnerComp, uint8*
 		OverlapResults,
 		Center,
 		FQuat::Identity,
-		ECollisionChannel::ECC_GameTraceChannel2, // BaseCharacter, minion만 체크
+		ECollisionChannel::ECC_GameTraceChannel2, // BaseCharacter, minion, nexus, turret만 체크
 		FCollisionShape::MakeSphere(DetectRadius),
 		CollisionQueryParam
 	);
@@ -47,7 +52,7 @@ void UBTService_MinionDetect::TickNode(UBehaviorTreeComponent& OwnerComp, uint8*
 		//	// 테스트 코드
 		//	NBLOG(Warning, TEXT("Actor Name : %s"), *OverlapResult.Actor->GetName());
 		//}
-		auto MinionAI = Cast<ANBMinionAIController>(OwnerComp.GetAIOwner());
+		
 		if (MinionAI->GetAttackInstigator() != nullptr) // 타격한 상대를 향해 공격
 		{
 			NBLOG(Warning, TEXT("Change Attack Target : %s"), *MinionAI->GetName());
@@ -66,6 +71,7 @@ void UBTService_MinionDetect::TickNode(UBehaviorTreeComponent& OwnerComp, uint8*
 		for (auto& OverlapResult : OverlapResults)
 		{
 			// TODO : 우선순위 적용
+			// 1순위 : 미니언, 2순위 : 소환 몬스터, 3순위: 터렛, 4순위 : 캐릭터
 			ACharacter* NBCharacter = Cast<ACharacter>(OverlapResult.GetActor());
 			
 			if (NBCharacter)
