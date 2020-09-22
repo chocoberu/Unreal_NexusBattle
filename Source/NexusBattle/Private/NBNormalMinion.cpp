@@ -14,8 +14,8 @@ ANBNormalMinion::ANBNormalMinion()
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	HPBarWidget = CreateDefaultSubobject<UWidgetComponent>(TEXT("HPBARWIDGET"));
-	HPBarWidget->SetupAttachment(GetMesh());
+	/*HPBarWidget = CreateDefaultSubobject<UWidgetComponent>(TEXT("HPBARWIDGET"));
+	HPBarWidget->SetupAttachment(GetMesh());*/
 
 	GetMesh()->SetRelativeLocationAndRotation(FVector(0.0f, 0.0f, -88.0f), FRotator(0.0f, -90.0f, 0.0f));
 
@@ -37,20 +37,20 @@ ANBNormalMinion::ANBNormalMinion()
 		GetMesh()->SetAnimInstanceClass(MINION_ANIM.Class);
 	}
 	// 콜리전 설정
-	GetCapsuleComponent()->SetCollisionProfileName(TEXT("NBCharacter"));
+	//GetCapsuleComponent()->SetCollisionProfileName(TEXT("NBCharacter"));
 
 	// HP Bar
-	HPBarWidget->SetRelativeLocation(FVector(0.0f, 0.0f, 200.0f));
-	HPBarWidget->SetWidgetSpace(EWidgetSpace::Screen);
+	/*HPBarWidget->SetRelativeLocation(FVector(0.0f, 0.0f, 200.0f));
+	HPBarWidget->SetWidgetSpace(EWidgetSpace::Screen);*/
 
-	static ConstructorHelpers::FClassFinder<UUserWidget>
+	/*static ConstructorHelpers::FClassFinder<UUserWidget>
 		UI_HUD(TEXT("/Game/UI/UI_HPBar_Minion.UI_HPBar_Minion_C"));
 
 	if (UI_HUD.Succeeded())
 	{
 		HPBarWidget->SetWidgetClass(UI_HUD.Class);
 		HPBarWidget->SetDrawSize(FVector2D(150.0f, 50.0f));
-	}
+	}*/
 
 	// HP
 	CurrentHP = 100.0f;
@@ -72,12 +72,6 @@ void ANBNormalMinion::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	auto MinionWidget = Cast<UNBMinionWidget>(HPBarWidget->GetUserWidgetObject());
-	if (MinionWidget != nullptr)
-	{
-		MinionWidget->BindMinion(this);
-	}
-
 	MinionAIController = Cast<ANBMinionAIController>(GetController());
 }
 
@@ -142,18 +136,13 @@ float ANBNormalMinion::TakeDamage(float DamageAmount, FDamageEvent const& Damage
 		//{
 		//	// TODO : 경험치 관련
 		//}
-		MinionAIController->StopAI();
+		SetCharacterState(ECharacterState::Dead);
 		MinionAnim->SetDeadAnim();
-		GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_None);
+		MinionAIController->StopAI();
 		SetActorEnableCollision(false);
 		HPBarWidget->SetHiddenInGame(true);
 	}
 	return FinalDamage;
-}
-
-float ANBNormalMinion::GetHPRatio()
-{
-	return (CurrentHP < KINDA_SMALL_NUMBER) ? 0.0f : (CurrentHP / MaxHP);
 }
 
 void ANBNormalMinion::NormalAttack()
@@ -236,6 +225,11 @@ void ANBNormalMinion::NormalAttackCheck()
 		if (HitResult.Actor.IsValid())
 		{
 			NBLOG(Warning, TEXT("Hit Actor Name : %s"), *HitResult.Actor->GetName());
+			auto NBBaseCharacter = Cast<ANBBaseCharacter>(HitResult.Actor.Get());
+			if (NBBaseCharacter == nullptr)
+				return;
+			if (NBBaseCharacter->GetMyTeam() == MyTeam && MyTeam != ETeam::Neutral)
+				return;
 
 			FDamageEvent DamageEvent;
 			HitResult.Actor->TakeDamage(10.0f, // 데미지 크기

@@ -3,14 +3,14 @@
 #pragma once
 
 #include "NexusBattle.h"
-#include "NBBaseCharacter.h"
+#include "NBBasePlayerCharacter.h"
 #include "NBGunnerCharacter.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class NEXUSBATTLE_API ANBGunnerCharacter : public ANBBaseCharacter
+class NEXUSBATTLE_API ANBGunnerCharacter : public ANBBasePlayerCharacter
 {
 	GENERATED_BODY()
 	
@@ -26,8 +26,8 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	virtual void PostInitializeComponents() override;
 
-	void NormalAttack();
-	void RocketDash();
+	virtual void NormalAttack();
+	virtual void RocketDash();
 
 	UFUNCTION() void OnAttackMontageEnded(UAnimMontage* Montage, bool bInterrupted);
 

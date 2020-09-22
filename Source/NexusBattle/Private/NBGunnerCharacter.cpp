@@ -126,6 +126,7 @@ void ANBGunnerCharacter::PostInitializeComponents()
 	CharacterStat->OnHPIsZero.AddLambda([this]() -> void
 		{
 			NBLOG(Warning, TEXT("Gunner HP is zero"));
+			SetCharacterState(ECharacterState::Dead);
 			GunnerAnim->SetDeadAnim();
 			SetActorEnableCollision(false);
 			HPBarWidget->SetHiddenInGame(true);
@@ -211,6 +212,11 @@ void ANBGunnerCharacter::NormalAttackCheck()
 		if (HitResult.Actor.IsValid())
 		{
 			NBLOG(Warning, TEXT("Hit Actor Name : %s"), *HitResult.Actor->GetName());
+			auto NBBaseCharacter = Cast<ANBBaseCharacter>(HitResult.Actor.Get());
+			if (NBBaseCharacter == nullptr)
+				return;
+			if (NBBaseCharacter->GetMyTeam() == MyTeam && MyTeam != ETeam::Neutral)
+				return;
 
 			FDamageEvent DamageEvent;
 			HitResult.Actor->TakeDamage(CharacterStat->GetAttack(), // 데미지 크기

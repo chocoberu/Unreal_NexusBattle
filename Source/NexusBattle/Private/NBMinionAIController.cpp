@@ -51,6 +51,8 @@ void ANBMinionAIController::StopAI()
 	auto BehaviorTreeComponent = Cast<UBehaviorTreeComponent>(BrainComponent);
 	if (BehaviorTreeComponent != nullptr)
 	{
+		GetBlackboardComponent()->SetValueAsObject(ANBMinionAIController::TargetKey, nullptr);
+		GetBlackboardComponent()->SetValueAsObject(ANBMinionAIController::TargetPosKey, nullptr);
 		BehaviorTreeComponent->StopTree(EBTStopMode::Safe);
 	}
 }

@@ -26,34 +26,17 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	virtual void PostInitializeComponents() override;
-	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
+	
 
+	ETeam GetMyTeam() { return MyTeam; }
+	ECharacterState GetCharacterState() { return CharacterState; }
+	void SetCharacterState(ECharacterState NewState) { CharacterState = NewState; }
 protected:
-	// 이동 관련 벡터 변수
-	FVector DirectionToMove = FVector::ZeroVector;
-
-	// 스프링 암 관련 변수
-	float ArmLengthTo = 0.0f;
-	FRotator ArmRotationTo = FRotator::ZeroRotator;
-	float ArmLengthSpeed = 0.0f;
-	float ArmRotationSpeed = 0.0f;
-
-	UPROPERTY(VisibleAnywhere, Category = Camera) USpringArmComponent* SpringArm;
-	UPROPERTY(VisibleAnywhere, Category = Camera) UCameraComponent* Camera;
-
-	UPROPERTY() class ANBPlayerController* NBController; // 플레이어 컨트롤러
-
-	// 이동 관련 함수
-	void UpDown(float NewAxisValue);
-	void LeftRight(float NewAxisValue);
-
-	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true)) float AttackRange;
-	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true)) float AttackRadius;
-
-	UPROPERTY(VisibleAnywhere, Category = Stat) class UNBCharacterStatComponent* CharacterStat;
-	UPROPERTY(VisibleAnywhere, Category = UI) class UWidgetComponent* HPBarWidget;
-
+	
 	// 팀 관련
 	UPROPERTY(EditAnywhere, Category = Team)
-		Team myteam;
+		ETeam MyTeam;
+
+	UPROPERTY(EditAnywhere, Category = State)
+		ECharacterState CharacterState;
 };

@@ -3,13 +3,11 @@
 #pragma once
 
 #include "NexusBattle.h"
-#include "GameFramework/Character.h"
+#include "NBBaseAICharacter.h"
 #include "NBNormalMinion.generated.h"
 
-DECLARE_MULTICAST_DELEGATE(FOnHPChangedDelegate);
-
 UCLASS()
-class NEXUSBATTLE_API ANBNormalMinion : public ACharacter
+class NEXUSBATTLE_API ANBNormalMinion : public ANBBaseAICharacter
 {
 	GENERATED_BODY()
 
@@ -30,7 +28,7 @@ public:
 	virtual void PostInitializeComponents() override;
 
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
-	float GetHPRatio();
+	
 
 	void NormalAttack();
 	void AttackStartComboState();
@@ -39,19 +37,16 @@ public:
 	UFUNCTION()
 		void OnAttackMontageEnded(UAnimMontage* Montage, bool bInterrupted);
 
-	float MaxHP = 100.0f;
-
-	FOnHPChangedDelegate OnHPChanged;
 private:
 	UPROPERTY() class UNBMinionAnimInstance* MinionAnim; // ¾Ö´Ô ÀÎ½ºÅÏ½º
-	UPROPERTY(VisibleAnywhere, Category = UI) class UWidgetComponent* HPBarWidget; // HP Bar
+	//UPROPERTY(VisibleAnywhere, Category = UI) class UWidgetComponent* HPBarWidget; // HP Bar
 
-	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true)) bool IsAttacking;
+	//UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true)) bool IsAttacking;
 
-	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true)) float AttackRange;
-	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true)) float AttackRadius;
+	//UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true)) float AttackRange;
+	//UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true)) float AttackRadius;
 
-	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = Health, Meta = (AllowPrivateAccess = true)) float CurrentHP;
+	//UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = Health, Meta = (AllowPrivateAccess = true)) float CurrentHP;
 
 	// ÄÞº¸ °ø°Ý °ü·Ã
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true)) bool CanNextCombo;
@@ -65,7 +60,4 @@ private:
 private:
 	void NormalAttackCheck();
 
-	// ÆÀ °ü·Ã
-	UPROPERTY(EditAnywhere, Category = Team)
-		Team myteam;
 };

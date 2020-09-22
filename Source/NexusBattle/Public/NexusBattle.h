@@ -11,9 +11,18 @@ DECLARE_LOG_CATEGORY_EXTERN(NexusBattle, Log, All);
 #define NBCHECK(Expr, ...) { if(!(Expr)) {NBLOG(Error,TEXT("ASSERTION : %s"), TEXT("'"#Expr"'")); return __VA_ARGS__; } }
 
 UENUM()
-enum class Team : uint8
+enum class ETeam : uint8
 {
 	Red = 1,
 	Blue = 2,
 	Neutral = 3
+};
+
+UENUM()
+enum class ECharacterState : uint8
+{
+	Normal,
+	Sturned,
+	Invincible,
+	Dead
 };

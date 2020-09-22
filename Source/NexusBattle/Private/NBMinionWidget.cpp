@@ -3,9 +3,9 @@
 
 #include "NBMinionWidget.h"
 #include "Components/ProgressBar.h"
-#include "NBNormalMinion.h"
+#include "NBBaseAICharacter.h"
 
-void UNBMinionWidget::BindMinion(ANBNormalMinion* NewMinion)
+void UNBMinionWidget::BindMinion(ANBBaseAICharacter* NewMinion)
 {
 	NBCHECK(NewMinion != nullptr);
 

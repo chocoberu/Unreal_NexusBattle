@@ -3,11 +3,11 @@
 #pragma once
 
 #include "NexusBattle.h"
-#include "GameFramework/Character.h"
+#include "NBBaseAICharacter.h"
 #include "NBNexus.generated.h"
 
 UCLASS()
-class NEXUSBATTLE_API ANBNexus : public ACharacter
+class NEXUSBATTLE_API ANBNexus : public ANBBaseAICharacter
 {
 	GENERATED_BODY()
 
@@ -25,7 +25,6 @@ public:
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
 
 private:
 	UPROPERTY(VisibleAnywhere, Category = Visual) UStaticMeshComponent* StaticMesh;

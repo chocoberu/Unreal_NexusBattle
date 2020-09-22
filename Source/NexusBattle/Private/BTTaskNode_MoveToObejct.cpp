@@ -24,7 +24,7 @@ EBTNodeResult::Type UBTTaskNode_MoveToObejct::ExecuteTask(UBehaviorTreeComponent
         return EBTNodeResult::Failed;
 
     // 테스트 코드
-    NBLOG(Warning, TEXT("Minion HP Ratio : %f"), Minion->GetHPRatio());
+    //NBLOG(Warning, TEXT("Minion HP Ratio : %f"), Minion->GetHPRatio());
     if (Minion->GetHPRatio() <= 0.0f)
     {
         NBLOG(Warning, TEXT("Dead Minion"));

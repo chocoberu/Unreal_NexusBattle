@@ -14,12 +14,12 @@ class NEXUSBATTLE_API UNBMinionWidget : public UUserWidget
 {
 	GENERATED_BODY()
 public:
-	void BindMinion(class ANBNormalMinion* NewMinion);
+	void BindMinion(class ANBBaseAICharacter* NewMinion);
 protected:
 	virtual void NativeConstruct() override;
 	void UpdateWidget();
 
 private:
-	UPROPERTY() class ANBNormalMinion* Minion;
+	UPROPERTY() class ANBBaseAICharacter* Minion;
 	UPROPERTY() class UProgressBar* HPProgressBar;
 };

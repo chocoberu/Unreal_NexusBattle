@@ -3,11 +3,11 @@
 #pragma once
 
 #include "NexusBattle.h"
-#include "GameFramework/Character.h"
+#include "NBBaseAICharacter.h"
 #include "NBTurret.generated.h"
 
 UCLASS()
-class NEXUSBATTLE_API ANBTurret : public ACharacter
+class NEXUSBATTLE_API ANBTurret : public ANBBaseAICharacter
 {
 	GENERATED_BODY()
 
