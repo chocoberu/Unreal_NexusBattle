@@ -8,6 +8,8 @@
 
 const FName ANBMinionAIController::TargetPosKey(TEXT("TargetPos"));
 const FName ANBMinionAIController::TargetKey(TEXT("Target"));
+const FName ANBMinionAIController::EnemyNexusKey(TEXT("EnemyNexus"));
+const FName ANBMinionAIController::EnemyNexusPosKey(TEXT("EnemyNexusPos"));
 
 ANBMinionAIController::ANBMinionAIController()
 {

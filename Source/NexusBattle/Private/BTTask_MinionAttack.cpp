@@ -4,6 +4,8 @@
 #include "BTTask_MinionAttack.h"
 #include "NBMinionAIController.h"
 #include "NBNormalMinion.h"
+#include "Blueprint/AIBlueprintHelperLibrary.h"
+#include "BehaviorTree/BlackboardComponent.h"
 
 UBTTask_MinionAttack::UBTTask_MinionAttack()
 {
@@ -17,6 +19,10 @@ EBTNodeResult::Type UBTTask_MinionAttack::ExecuteTask(UBehaviorTreeComponent& Ow
 	auto Minion = Cast<ANBNormalMinion>(OwnerComp.GetAIOwner()->GetPawn());
 	if (Minion == nullptr)
 		return EBTNodeResult::Failed;
+	auto Target = Cast<ACharacter>(OwnerComp.GetBlackboardComponent()->GetValueAsObject(ANBMinionAIController::TargetKey));
+	if (Target == nullptr)
+		return EBTNodeResult::Failed;
+	UAIBlueprintHelperLibrary::SimpleMoveToActor(OwnerComp.GetAIOwner(), Target);
 	Minion->NormalAttack();
 	IsAttacking = true;
 	

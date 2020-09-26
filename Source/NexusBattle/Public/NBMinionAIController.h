@@ -21,6 +21,8 @@ public:
 
 	static const FName TargetPosKey;
 	static const FName TargetKey;
+	static const FName EnemyNexusKey;
+	static const FName EnemyNexusPosKey;
 
 	void RunAI(); // AI 가동
 	void StopAI(); // AI 작동 중단
