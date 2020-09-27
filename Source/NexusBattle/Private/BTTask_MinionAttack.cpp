@@ -23,6 +23,13 @@ EBTNodeResult::Type UBTTask_MinionAttack::ExecuteTask(UBehaviorTreeComponent& Ow
 	if (Target == nullptr)
 		return EBTNodeResult::Failed;
 	UAIBlueprintHelperLibrary::SimpleMoveToActor(OwnerComp.GetAIOwner(), Target);
+
+	// È¸Àü
+	FVector LookVector = Target->GetActorLocation() - Minion->GetActorLocation();
+	LookVector.Z = 0.0f;
+	FRotator TargetRot = FRotationMatrix::MakeFromX(LookVector).Rotator();
+	Minion->SetActorRotation(FMath::RInterpTo(Minion->GetActorRotation(), TargetRot, GetWorld()->GetDeltaSeconds(), 2.0f));
+
 	Minion->NormalAttack();
 	IsAttacking = true;
 	
