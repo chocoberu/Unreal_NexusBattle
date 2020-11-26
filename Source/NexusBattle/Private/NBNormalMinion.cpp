@@ -193,6 +193,16 @@ void ANBNormalMinion::NormalAttackCheck()
 	NBLOG(Warning, TEXT("Minion NormalAttack Check"));
 	FHitResult HitResult;
 	FCollisionQueryParams Params(NAME_None, false, this);
+
+	for (TObjectIterator<ANBBaseCharacter> It; It; ++It)
+	{
+		if ((*It)->GetMyTeam() == MyTeam)
+		{
+			Params.AddIgnoredActor(*It);
+			// NBLOG(Warning, TEXT("Same Team Actor : %s"), *(*It)->GetName());
+		}
+	}
+
 	bool bResult = GetWorld()->SweepSingleByChannel(
 		HitResult,
 		GetActorLocation(), // Ω√¿€¡°

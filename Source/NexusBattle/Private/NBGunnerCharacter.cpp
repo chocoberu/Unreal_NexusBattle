@@ -181,51 +181,16 @@ void ANBGunnerCharacter::NormalAttackCheck()
 	FHitResult HitResult;
 	//TArray<FHitResult> HitResults;
 	FCollisionQueryParams Params(NAME_None, false, this);
-	
-	//FCollisionQueryParams Params2(NAME_None,false, this);
-	//TArray<FOverlapResult> OverlapRes;
-	//
-	//bool bResult2 = GetWorld()->OverlapMultiByChannel(
-	//	OverlapRes,
-	//	GetActorLocation(),
-	//	FQuat::Identity,
-	//	ECollisionChannel::ECC_GameTraceChannel1, // BaseCharacter, minion, nexus, turret만 체크
-	//	FCollisionShape::MakeSphere(AttackRadius),
-	//	Params
-	//);
-	//NBLOG(Warning, TEXT("OverlapResult Num : %d"), OverlapRes.Num());
-	//if (bResult2)
-	//{
-	//	NBLOG(Warning, TEXT("OverlapResult Num : %d"), OverlapRes.Num());
-	//	for (auto& OverlapResult : OverlapRes)
-	//	{
-	//		if (OverlapResult.Actor.IsValid())
-	//		{
-	//			NBLOG(Warning, TEXT("Overlap Actor : %s"), *OverlapResult.GetActor()->GetName());
-	//			auto NBBaseCharacter = Cast<ANBBaseCharacter>(OverlapResult.GetActor());
-	//			//if (NBBaseCharacter->GetMyTeam() == MyTeam)
-	//			//{
-	//			//	//Params.AddIgnoredActor(OverlapResult.GetActor());
-	//			//}
-	//		}
-	//	}
-	//	DrawDebugSphere(GetWorld(), GetActorLocation(), AttackRange, 16, FColor::Green, false, 0.2f);
-	//	
-	//}
-	//else
-	//{
-	//	DrawDebugSphere(GetWorld(), GetActorLocation(), AttackRange, 16, FColor::Red, false, 0.2f);
-	//}
 
-	//bool bResult = GetWorld()->SweepMultiByChannel(
-	//	HitResults,
-	//	GetActorLocation(),
-	//	GetActorLocation() + GetActorForwardVector() * AttackRange, // 끝점
-	//	FQuat::Identity, // 회전값
-	//	ECollisionChannel::ECC_GameTraceChannel2, // 트레이스채널
-	//	FCollisionShape::MakeSphere(AttackRadius),
-	//	Params
-	//);
+	for (TObjectIterator<ANBBaseCharacter> It; It; ++It)
+	{
+		if ((*It)->GetMyTeam() == MyTeam)
+		{
+			Params.AddIgnoredActor(*It);
+			//NBLOG(Warning, TEXT("Same Team Actor : %s"), *(*It)->GetName());
+		}
+	}
+	
 	bool bResult = GetWorld()->SweepSingleByChannel(
 		HitResult,
 		GetActorLocation(), // 시작점
