@@ -24,7 +24,10 @@ ANBNexus::ANBNexus()
 		StaticMesh->SetStaticMesh(ST_NEXUS.Object);
 	}
 	// 콜리전 설정
-	GetCapsuleComponent()->SetCollisionProfileName(TEXT("NBCharacter"));
+	//GetCapsuleComponent()->SetCollisionProfileName(TEXT("NBCharacter"));
+
+	CurrentHP = MaxHP = 5000.0f;
+
 }
 
 // Called when the game starts or when spawned
@@ -46,5 +49,16 @@ void ANBNexus::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
+}
+
+float ANBNexus::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
+{
+	float FinalDamage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
+
+	CurrentHP = FMath::Clamp<float>(CurrentHP - FinalDamage, 0.0f, MaxHP);
+	OnHPChanged.Broadcast();
+	NBLOG(Warning, TEXT("Nexus Current HP : %f"), CurrentHP);
+
+	return FinalDamage;
 }
 

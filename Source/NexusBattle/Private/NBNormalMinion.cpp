@@ -53,7 +53,7 @@ ANBNormalMinion::ANBNormalMinion()
 	}*/
 
 	// HP
-	CurrentHP = 100.0f;
+	CurrentHP = MaxHP = 100.0f;
 
 	AttackRange = 170.0f;
 	AttackRadius = 50.0f;
