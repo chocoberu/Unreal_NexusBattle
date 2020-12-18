@@ -2,6 +2,7 @@
 
 
 #include "NBNexus.h"
+#include "NBNormalMinion.h"
 
 // Sets default values
 ANBNexus::ANBNexus()
@@ -26,7 +27,7 @@ ANBNexus::ANBNexus()
 	// 콜리전 설정
 	//GetCapsuleComponent()->SetCollisionProfileName(TEXT("NBCharacter"));
 
-	CurrentHP = MaxHP = 5000.0f;
+	CurrentHP = MaxHP = 2000.0f;
 
 }
 
@@ -59,6 +60,15 @@ float ANBNexus::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, 
 	OnHPChanged.Broadcast();
 	NBLOG(Warning, TEXT("Nexus Current HP : %f"), CurrentHP);
 
+	// 테스트 코드
+	//SpawnMinion();
+
 	return FinalDamage;
+}
+
+void ANBNexus::SpawnMinion()
+{
+	MinionClass = GetWorld()->SpawnActor<ANBNormalMinion>(ANBNormalMinion::StaticClass(), GetActorLocation() + GetActorForwardVector() * 5.0f, GetActorRotation());
+	MinionClass->SetMyTeam(this->GetMyTeam());
 }
 

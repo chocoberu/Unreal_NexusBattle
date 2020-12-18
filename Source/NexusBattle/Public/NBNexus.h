@@ -27,8 +27,10 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
 
+	void SpawnMinion();
 
 private:
 	UPROPERTY(VisibleAnywhere, Category = Visual) UStaticMeshComponent* StaticMesh;
-	
+	UPROPERTY(EditDefaultsOnly, Category = Projectile) // ÃÑ¾Ë Å¬·¡½º 
+		class ANBNormalMinion* MinionClass;
 };
