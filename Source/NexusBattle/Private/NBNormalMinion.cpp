@@ -144,6 +144,20 @@ float ANBNormalMinion::TakeDamage(float DamageAmount, FDamageEvent const& Damage
 	}
 	return FinalDamage;
 }
+void ANBNormalMinion::SetMyTeam(ETeam NewTeam)
+{
+	Super::SetMyTeam(NewTeam);
+
+	/*if (NewTeam == ETeam::Blue)
+	{
+		static ConstructorHelpers::FObjectFinder<USkeletalMesh>
+			SK_MINION_BLUE(TEXT("/Game/ParagonMinions/Characters/Minions/Dusk_Minions/Meshes/Minion_Lane_Melee_Dusk.Minion_Lane_Melee_Dusk"));
+		if (SK_MINION_BLUE.Succeeded())
+		{
+			GetMesh()->SetSkeletalMesh(SK_MINION_BLUE.Object);
+		}
+	}*/
+}
 
 void ANBNormalMinion::NormalAttack()
 {

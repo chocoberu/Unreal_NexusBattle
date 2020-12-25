@@ -29,7 +29,7 @@ public:
 	
 
 	ETeam GetMyTeam() { return MyTeam; }
-	void SetMyTeam(ETeam NewTeam) { MyTeam = NewTeam; }
+	virtual void SetMyTeam(ETeam NewTeam) { MyTeam = NewTeam; }
 	ECharacterState GetCharacterState() { return CharacterState; }
 	void SetCharacterState(ECharacterState NewState) { CharacterState = NewState; }
 protected:

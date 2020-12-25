@@ -18,6 +18,7 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 
 public:	
 	// Called every frame
@@ -33,4 +34,9 @@ private:
 	UPROPERTY(VisibleAnywhere, Category = Visual) UStaticMeshComponent* StaticMesh;
 	UPROPERTY(EditDefaultsOnly, Category = Projectile) // ÃÑ¾Ë Å¬·¡½º 
 		class ANBNormalMinion* MinionClass;
+
+	UPROPERTY()
+		FTimerHandle SpawnTimerHandle;
+	UPROPERTY()
+		float SpawnInterval;
 };

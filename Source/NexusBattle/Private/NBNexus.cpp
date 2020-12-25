@@ -29,6 +29,7 @@ ANBNexus::ANBNexus()
 
 	CurrentHP = MaxHP = 2000.0f;
 
+	SpawnInterval = 10.0f;
 }
 
 // Called when the game starts or when spawned
@@ -36,6 +37,17 @@ void ANBNexus::BeginPlay()
 {
 	Super::BeginPlay();
 	
+
+	GetWorld()->GetTimerManager().SetTimer(SpawnTimerHandle, this, &ANBNexus::SpawnMinion, SpawnInterval, true);
+
+	SpawnMinion();
+}
+
+void ANBNexus::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
+	Super::EndPlay(EndPlayReason);
+
+	GetWorld()->GetTimerManager().ClearTimer(SpawnTimerHandle);
 }
 
 // Called every frame
