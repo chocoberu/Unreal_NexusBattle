@@ -58,6 +58,10 @@ private:
 	// AI
 	UPROPERTY() class ANBMinionAIController* MinionAIController;
 
+	// ½ºÄÌ·¹Å» ¸Þ½Ã ÄÄÆ÷³ÍÆ® 2
+	UPROPERTY(EditAnywhere, Category = TEST)
+		USkeletalMesh* BlueMesh;
+
 private:
 	void NormalAttackCheck();
 

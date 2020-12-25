@@ -36,6 +36,13 @@ ANBNormalMinion::ANBNormalMinion()
 	{
 		GetMesh()->SetAnimInstanceClass(MINION_ANIM.Class);
 	}
+	static ConstructorHelpers::FObjectFinder<USkeletalMesh>
+		SK_BLUE_MINION(TEXT("/Game/ParagonMinions/Characters/Minions/Dusk_Minions/Meshes/Minion_Lane_Melee_Dusk.Minion_Lane_Melee_Dusk"));
+	if (SK_BLUE_MINION.Succeeded())
+	{
+		BlueMesh = SK_BLUE_MINION.Object;
+	}
+
 	// 콜리전 설정
 	//GetCapsuleComponent()->SetCollisionProfileName(TEXT("NBCharacter"));
 
@@ -148,15 +155,16 @@ void ANBNormalMinion::SetMyTeam(ETeam NewTeam)
 {
 	Super::SetMyTeam(NewTeam);
 
-	/*if (NewTeam == ETeam::Blue)
+	if (NewTeam == ETeam::Blue && BlueMesh != NULL)
 	{
-		static ConstructorHelpers::FObjectFinder<USkeletalMesh>
+		GetMesh()->SetSkeletalMesh(BlueMesh);
+		/*static ConstructorHelpers::FObjectFinder<USkeletalMesh>
 			SK_MINION_BLUE(TEXT("/Game/ParagonMinions/Characters/Minions/Dusk_Minions/Meshes/Minion_Lane_Melee_Dusk.Minion_Lane_Melee_Dusk"));
 		if (SK_MINION_BLUE.Succeeded())
 		{
 			GetMesh()->SetSkeletalMesh(SK_MINION_BLUE.Object);
-		}
-	}*/
+		}*/
+	}
 }
 
 void ANBNormalMinion::NormalAttack()
