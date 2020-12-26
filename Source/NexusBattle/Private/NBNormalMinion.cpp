@@ -148,6 +148,9 @@ float ANBNormalMinion::TakeDamage(float DamageAmount, FDamageEvent const& Damage
 		MinionAIController->StopAI();
 		SetActorEnableCollision(false);
 		HPBarWidget->SetHiddenInGame(true);
+		
+		// TODO : 미니언 삭제 (오브젝트 풀링 적용)
+		SetLifeSpan(5.0f);
 	}
 	return FinalDamage;
 }
@@ -158,12 +161,6 @@ void ANBNormalMinion::SetMyTeam(ETeam NewTeam)
 	if (NewTeam == ETeam::Blue && BlueMesh != NULL)
 	{
 		GetMesh()->SetSkeletalMesh(BlueMesh);
-		/*static ConstructorHelpers::FObjectFinder<USkeletalMesh>
-			SK_MINION_BLUE(TEXT("/Game/ParagonMinions/Characters/Minions/Dusk_Minions/Meshes/Minion_Lane_Melee_Dusk.Minion_Lane_Melee_Dusk"));
-		if (SK_MINION_BLUE.Succeeded())
-		{
-			GetMesh()->SetSkeletalMesh(SK_MINION_BLUE.Object);
-		}*/
 	}
 }
 
@@ -216,12 +213,12 @@ void ANBNormalMinion::NormalAttackCheck()
 	FHitResult HitResult;
 	FCollisionQueryParams Params(NAME_None, false, this);
 
+	// 같은 팀 캐릭터는 공격 체크에서 제외
 	for (TObjectIterator<ANBBaseCharacter> It; It; ++It)
 	{
 		if ((*It)->GetMyTeam() == MyTeam)
 		{
 			Params.AddIgnoredActor(*It);
-			// NBLOG(Warning, TEXT("Same Team Actor : %s"), *(*It)->GetName());
 		}
 	}
 

@@ -3,6 +3,7 @@
 
 #include "NBNexus.h"
 #include "NBNormalMinion.h"
+#include "Components/WidgetComponent.h"
 
 // Sets default values
 ANBNexus::ANBNexus()
@@ -72,9 +73,15 @@ float ANBNexus::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, 
 	OnHPChanged.Broadcast();
 	NBLOG(Warning, TEXT("Nexus Current HP : %f"), CurrentHP);
 
-	// 테스트 코드
-	//SpawnMinion();
+	if (CurrentHP <= 0.0f)
+	{
+		// 넥서스 파괴 시 미니언 스폰 중지
+		GetWorld()->GetTimerManager().ClearTimer(SpawnTimerHandle);
 
+		SetActorEnableCollision(false);
+		HPBarWidget->SetHiddenInGame(true);
+	}
+	
 	return FinalDamage;
 }
 
