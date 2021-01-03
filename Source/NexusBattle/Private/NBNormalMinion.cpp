@@ -6,6 +6,7 @@
 #include "Components/WidgetComponent.h"
 #include "NBMinionWidget.h"
 #include "NBMinionAIController.h"
+#include "NBBasePlayerCharacter.h"
 #include "DrawDebugHelpers.h"
 
 // Sets default values
@@ -62,16 +63,22 @@ ANBNormalMinion::ANBNormalMinion()
 	// HP
 	CurrentHP = MaxHP = 100.0f;
 
+	// 공격 관련 초기화
 	AttackRange = 170.0f;
 	AttackRadius = 50.0f;
 	IsAttacking = false;
 	MaxCombo = 4;
 	AttackEndComboState();
 
+	// AI 관련 초기화
 	AIControllerClass = ANBMinionAIController::StaticClass();
 	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
 
+	// 미니언 이동 속도
 	GetCharacterMovement()->MaxWalkSpeed = 300.0f;
+
+	// Drop Exp
+	DropExp = 10.0f;
 }
 
 // Called when the game starts or when spawned
@@ -151,6 +158,14 @@ float ANBNormalMinion::TakeDamage(float DamageAmount, FDamageEvent const& Damage
 		
 		// TODO : 미니언 삭제 (오브젝트 풀링 적용)
 		SetLifeSpan(5.0f);
+
+		// 데미지 유발자에게 경험치 주기
+		// TODO : 주변 플레이어에게 경험치 차등 분배 추가
+		ANBBasePlayerCharacter* Player = Cast<ANBBasePlayerCharacter>(DamageCauser);
+		if (Player == nullptr)
+			NBLOG(Error, TEXT("Player Exp Error"));
+		Player->AddExp(DropExp);
+
 	}
 	return FinalDamage;
 }

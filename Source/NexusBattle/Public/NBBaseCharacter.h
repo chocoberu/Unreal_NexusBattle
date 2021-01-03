@@ -40,4 +40,6 @@ protected:
 
 	UPROPERTY(EditAnywhere, Category = State)
 		ECharacterState CharacterState;
+
+	UPROPERTY(EditAnywhere, Category = Exp) float DropExp;
 };

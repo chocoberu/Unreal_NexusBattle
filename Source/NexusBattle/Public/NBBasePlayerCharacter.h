@@ -30,6 +30,8 @@ public:
 
 	// 공격, 스킬 관련 함수
 
+	// 경험치 추가
+	UFUNCTION() void AddExp(float NewExp);
 protected:
 	// 이동 관련 벡터 변수
 	FVector DirectionToMove = FVector::ZeroVector;
@@ -48,9 +50,6 @@ protected:
 	// 이동 관련 함수
 	void UpDown(float NewAxisValue);
 	void LeftRight(float NewAxisValue);
-
-	
-
 
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true)) float AttackRange;
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true)) float AttackRadius;

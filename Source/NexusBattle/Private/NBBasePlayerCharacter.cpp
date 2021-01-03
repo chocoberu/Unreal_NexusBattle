@@ -124,3 +124,7 @@ void ANBBasePlayerCharacter::LeftRight(float NewAxisValue)
 	DirectionToMove.Y = NewAxisValue;
 }
 
+void ANBBasePlayerCharacter::AddExp(float NewExp)
+{
+	CharacterStat->AddExp(NewExp);
+}

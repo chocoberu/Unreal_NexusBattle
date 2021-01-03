@@ -84,6 +84,11 @@ void UNBCharacterStatComponent::SetDamage(float NewDamage)
 	NBCHECK(CurrentStatData != nullptr);
 	SetHP(FMath::Clamp<float>(CurrentHP - NewDamage, 0.0f, CurrentStatData->MaxHP));
 }
+void UNBCharacterStatComponent::AddExp(float NewExp)
+{
+	CurrentExp += NewExp;
+	NBLOG(Warning, TEXT("Current Exp : %f"), CurrentExp);
+}
 
 float UNBCharacterStatComponent::GetAttack() const
 {

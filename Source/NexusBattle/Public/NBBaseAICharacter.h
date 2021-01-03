@@ -43,4 +43,6 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Health, Meta = (AllowPrivateAccess = true)) float CurrentHP;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Health, Meta = (AllowPrivateAccess = true)) float MaxHP;
+
+	
 };
