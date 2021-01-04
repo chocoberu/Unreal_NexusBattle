@@ -25,4 +25,5 @@ private:
 	UPROPERTY() class UNBCharacterStatComponent* CurrentCharacterStat;
 	UPROPERTY() class UProgressBar* HPProgressBar;
 	UPROPERTY() class UProgressBar* MPProgressBar;
+	UPROPERTY() class UTextBlock* LevelText;
 };

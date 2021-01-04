@@ -8,6 +8,7 @@
 
 DECLARE_MULTICAST_DELEGATE(FOnHPIsZeroDelegate);
 DECLARE_MULTICAST_DELEGATE(FOnHPChangedDelegate);
+DECLARE_MULTICAST_DELEGATE(FOnLevelChangedDelegate);
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class NEXUSBATTLE_API UNBCharacterStatComponent : public UActorComponent
@@ -41,9 +42,13 @@ public:
 	float GetCurrentHP() const;
 
 	float GetHPRatio() const;
+	float GetNextExp() const;
+
+	int32 GetLevel() const;
 
 	FOnHPIsZeroDelegate OnHPIsZero;
 	FOnHPChangedDelegate OnHPChanged;
+	FOnLevelChangedDelegate OnLevelChanged;
 
 private:
 	struct FNBCharacterData* CurrentStatData = nullptr;

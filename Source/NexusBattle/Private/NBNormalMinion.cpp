@@ -146,10 +146,6 @@ float ANBNormalMinion::TakeDamage(float DamageAmount, FDamageEvent const& Damage
 	// TODO : hpbar, 공격 추가, 팀
 	if (CurrentHP <= 0.0f)
 	{
-		//if (EventInstigator->IsPlayerController())
-		//{
-		//	// TODO : 경험치 관련
-		//}
 		SetCharacterState(ECharacterState::Dead);
 		MinionAnim->SetDeadAnim();
 		MinionAIController->StopAI();
@@ -163,8 +159,11 @@ float ANBNormalMinion::TakeDamage(float DamageAmount, FDamageEvent const& Damage
 		// TODO : 주변 플레이어에게 경험치 차등 분배 추가
 		ANBBasePlayerCharacter* Player = Cast<ANBBasePlayerCharacter>(DamageCauser);
 		if (Player == nullptr)
-			NBLOG(Error, TEXT("Player Exp Error"));
-		Player->AddExp(DropExp);
+		{
+			NBLOG(Error, TEXT("Player nullptr"));
+		}
+		else
+			Player->AddExp(DropExp);
 
 	}
 	return FinalDamage;

@@ -50,7 +50,7 @@ void UNBCharacterStatComponent::SetNewLevel(int32 NewLevel)
 	if (GetOwner()->GetClass() == ANBGunnerCharacter::StaticClass())
 	{
 		auto Character = Cast<ANBGunnerCharacter>(GetOwner());
-
+		
 		CurrentStatData = NBGameInstance->GetGunneData(NewLevel);
 		if (CurrentStatData != nullptr)
 		{
@@ -58,7 +58,10 @@ void UNBCharacterStatComponent::SetNewLevel(int32 NewLevel)
 			if (Level == 1)
 				SetHP(CurrentStatData->MaxHP);
 			else
+			{
 				SetHP(CurrentHP + 10.0f);
+				OnLevelChanged.Broadcast();
+			}
 			NBLOG(Warning, TEXT("Gunner Max HP : %f"), CurrentStatData->MaxHP);
 		}
 		else
@@ -72,6 +75,7 @@ void UNBCharacterStatComponent::SetHP(float NewHP)
 	CurrentHP = NewHP;
 	OnHPChanged.Broadcast();
 
+	// 사망 처리
 	if (CurrentHP < KINDA_SMALL_NUMBER)
 	{
 		CurrentHP = 0.0f;
@@ -88,6 +92,13 @@ void UNBCharacterStatComponent::AddExp(float NewExp)
 {
 	CurrentExp += NewExp;
 	NBLOG(Warning, TEXT("Current Exp : %f"), CurrentExp);
+
+	// 레벨 업 처리
+	if (CurrentExp >= GetNextExp())
+	{
+		CurrentExp -= GetNextExp();
+		SetNewLevel(Level + 1);
+	}
 }
 
 float UNBCharacterStatComponent::GetAttack() const
@@ -143,4 +154,14 @@ float UNBCharacterStatComponent::GetHPRatio() const
 	NBCHECK(CurrentStatData != nullptr, 0.0f);
 
 	return (CurrentStatData->MaxHP < KINDA_SMALL_NUMBER) ? 0.0f : (CurrentHP / CurrentStatData->MaxHP);
+}
+
+float UNBCharacterStatComponent::GetNextExp() const
+{
+	NBCHECK(CurrentStatData != nullptr, 0.0f);
+	return CurrentStatData->NextExp;
+}
+int32 UNBCharacterStatComponent::GetLevel() const
+{
+	return Level;
 }

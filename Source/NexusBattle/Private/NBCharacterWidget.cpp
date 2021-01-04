@@ -4,6 +4,7 @@
 #include "NBCharacterWidget.h"
 #include "NBCharacterStatComponent.h"
 #include "Components/ProgressBar.h"
+#include "Components/TextBlock.h"
 
 void UNBCharacterWidget::BindCharacterStat(UNBCharacterStatComponent* NewCharacterStat)
 {
@@ -11,6 +12,7 @@ void UNBCharacterWidget::BindCharacterStat(UNBCharacterStatComponent* NewCharact
 
 	CurrentCharacterStat = NewCharacterStat;
 	NewCharacterStat->OnHPChanged.AddUObject(this, &UNBCharacterWidget::UpdateWidget);
+	NewCharacterStat->OnLevelChanged.AddUObject(this, &UNBCharacterWidget::UpdateWidget);
 }
 
 void UNBCharacterWidget::NativeConstruct()
@@ -18,6 +20,10 @@ void UNBCharacterWidget::NativeConstruct()
 	Super::NativeConstruct();
 	HPProgressBar = Cast<UProgressBar>(GetWidgetFromName(TEXT("PB_HPBar")));
 	NBCHECK(HPProgressBar != nullptr);
+	MPProgressBar = Cast<UProgressBar>(GetWidgetFromName(TEXT("PB_MPBar")));
+	NBCHECK(MPProgressBar != nullptr);
+	LevelText = Cast<UTextBlock>(GetWidgetFromName(TEXT("TEXT_Level")));
+	NBCHECK(LevelText != nullptr);
 	UpdateWidget();
 }
 
@@ -25,5 +31,9 @@ void UNBCharacterWidget::UpdateWidget()
 {
 	if (HPProgressBar != nullptr)
 		HPProgressBar->SetPercent(CurrentCharacterStat->GetHPRatio());
+	if (MPProgressBar != nullptr)
+		MPProgressBar->SetPercent(CurrentCharacterStat->GetHPRatio()); // TODO : GetMpRatio 추가 필요
+	if (LevelText != nullptr)
+		LevelText->SetText(FText::FromString(FString::FromInt(CurrentCharacterStat->GetLevel())));
 	
 }

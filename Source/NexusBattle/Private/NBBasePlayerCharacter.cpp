@@ -69,8 +69,10 @@ void ANBBasePlayerCharacter::BeginPlay()
 	{
 		CharacterWidget->BindCharacterStat(CharacterStat);
 	}
-	NBController = Cast<ANBPlayerController>(GetController());
-	NBCHECK(NBController != nullptr);
+
+	// TODO : 컨트롤러 관련 오류 해결 
+	/*NBController = Cast<ANBPlayerController>(GetController());
+	NBCHECK(NBController != nullptr);*/
 }
 
 // Called every frame
@@ -78,6 +80,7 @@ void ANBBasePlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	// 카메라 위치 조정
 	// InterpTo() : 지정한 속력으로 목표 지점까지 진행하되, 목표 지점까지 도달하면 그 값에서 멈추는 기능
 	SpringArm->TargetArmLength = FMath::FInterpTo(SpringArm->TargetArmLength, ArmLengthTo, DeltaTime, ArmLengthSpeed);
 	SpringArm->SetRelativeRotation(FMath::RInterpTo(SpringArm->GetRelativeRotation(), ArmRotationTo, DeltaTime, ArmRotationSpeed));
@@ -100,13 +103,13 @@ void ANBBasePlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerIn
 void ANBBasePlayerCharacter::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
+
 }
 
 float ANBBasePlayerCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
 	float FinalDamage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
-	// TODO : 방어력에 따라 데미지 계산
-
+	
 	FinalDamage -= CharacterStat->GetDefence();
 
 	CharacterStat->SetDamage(FinalDamage);
