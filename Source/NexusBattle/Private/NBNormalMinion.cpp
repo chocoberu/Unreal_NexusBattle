@@ -153,18 +153,18 @@ float ANBNormalMinion::TakeDamage(float DamageAmount, FDamageEvent const& Damage
 		HPBarWidget->SetHiddenInGame(true);
 		
 		// TODO : 미니언 삭제 (오브젝트 풀링 적용)
-		SetLifeSpan(5.0f);
+		SetLifeSpan(3.0f);
 
 		// 데미지 유발자에게 경험치 주기
 		// TODO : 주변 플레이어에게 경험치 차등 분배 추가
-		ANBBasePlayerCharacter* Player = Cast<ANBBasePlayerCharacter>(DamageCauser);
-		if (Player == nullptr)
-		{
-			NBLOG(Error, TEXT("Player nullptr"));
-		}
-		else
-			Player->AddExp(DropExp);
 
+		// 플레이어가 죽인 경우 경험치 추가
+		ANBBasePlayerCharacter* Player = Cast<ANBBasePlayerCharacter>(DamageCauser);
+		if (Player != nullptr)
+		{
+			Player->AddExp(DropExp);
+		}
+		
 	}
 	return FinalDamage;
 }

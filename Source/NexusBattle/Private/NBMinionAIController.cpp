@@ -28,7 +28,7 @@ ANBMinionAIController::ANBMinionAIController()
 	{
 		BTAsset = BTObject.Object;
 	}
-	DetectRange = 500.0f;
+	DetectRange = 300.0f;
 }
 
 void ANBMinionAIController::OnPossess(APawn* InPawn)
