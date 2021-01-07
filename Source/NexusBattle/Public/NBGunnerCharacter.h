@@ -36,6 +36,8 @@ private:
 
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true)) bool IsAttacking;
 
+	UPROPERTY(VisibleAnywhere, Category = Attack, Meta = (AllowPrivateAccess = true)) class ANBGunnerHitEffect* HitEffectClass;
+
 	// TODO : 캐릭터 상태를 나타낼 enum 추가
 
 private:

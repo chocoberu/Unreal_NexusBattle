@@ -8,6 +8,7 @@
 #include "Components/WidgetComponent.h"
 #include "NBCharacterWidget.h"
 #include "NBPlayerController.h"
+#include "NBGunnerHitEffect.h"
 
 ANBGunnerCharacter::ANBGunnerCharacter()
 {
@@ -185,6 +186,9 @@ void ANBGunnerCharacter::NormalAttackCheck()
 				GetController(), // 가해자 (컨트롤러)
 				this); // 데미지 전달을 위해 사용한 도구 (액터)
 			// TODO : 타격 파티클 추가
+			HitEffectClass = GetWorld()->SpawnActor<ANBGunnerHitEffect>(ANBGunnerHitEffect::StaticClass(),
+				HitResult.Actor.Get()->GetActorLocation(), HitResult.Actor.Get()->GetActorRotation());
+			HitEffectClass->PlayHitEffect();
 		}
 		/*NBLOG(Warning, TEXT("Total Hit Actors : %d"), HitResults.Num());
 		for (auto& Result : HitResults)

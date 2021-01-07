@@ -32,7 +32,7 @@ void UNBCharacterWidget::UpdateWidget()
 	if (HPProgressBar != nullptr)
 		HPProgressBar->SetPercent(CurrentCharacterStat->GetHPRatio());
 	if (MPProgressBar != nullptr)
-		MPProgressBar->SetPercent(CurrentCharacterStat->GetHPRatio()); // TODO : GetMpRatio 추가 필요
+		MPProgressBar->SetPercent(CurrentCharacterStat->GetMPRatio());
 	if (LevelText != nullptr)
 		LevelText->SetText(FText::FromString(FString::FromInt(CurrentCharacterStat->GetLevel())));
 	

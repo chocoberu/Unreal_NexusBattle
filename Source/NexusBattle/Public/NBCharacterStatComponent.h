@@ -31,6 +31,7 @@ public:
 	void SetNewLevel(int32 NewLevel);
 	void SetDamage(float NewDamage);
 	void SetHP(float NewHP);
+	void SetMP(float NewMP);
 	void AddExp(float NewExp);
 	float GetAttack() const;
 	float GetDefence() const;
@@ -42,6 +43,7 @@ public:
 	float GetCurrentHP() const;
 
 	float GetHPRatio() const;
+	float GetMPRatio() const;
 	float GetNextExp() const;
 
 	int32 GetLevel() const;
@@ -55,5 +57,6 @@ private:
 
 	UPROPERTY(EditInstanceOnly, Category = Stat, Meta = (AllowPrivateAccess = true)) int32 Level;
 	UPROPERTY(Transient, VisibleInstanceOnly, Category = Stat, Meta = (AllowPrivateAccess = true)) float CurrentHP;
+	UPROPERTY(Transient, VisibleInstanceOnly, Category = Stat, Meta = (AllowPrivateAccess = true)) float CurrentMP;
 	UPROPERTY(Transient, VisibleInstanceOnly, Category = Stat, Meta = (AllowPrivateAccess = true)) float CurrentExp;
 };

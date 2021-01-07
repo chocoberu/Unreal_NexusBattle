@@ -56,10 +56,14 @@ void UNBCharacterStatComponent::SetNewLevel(int32 NewLevel)
 		{
 			Level = NewLevel;
 			if (Level == 1)
+			{
 				SetHP(CurrentStatData->MaxHP);
+				SetMP(CurrentStatData->MaxMP);
+			}
 			else
 			{
 				SetHP(CurrentHP + 10.0f);
+				SetMP(CurrentMP + 20.0f);
 				OnLevelChanged.Broadcast();
 			}
 			NBLOG(Warning, TEXT("Gunner Max HP : %f"), CurrentStatData->MaxHP);
@@ -81,6 +85,11 @@ void UNBCharacterStatComponent::SetHP(float NewHP)
 		CurrentHP = 0.0f;
 		OnHPIsZero.Broadcast();
 	}
+}
+void UNBCharacterStatComponent::SetMP(float NewMP)
+{
+	CurrentMP = NewMP;
+	OnHPChanged.Broadcast();
 }
 
 void UNBCharacterStatComponent::SetDamage(float NewDamage)
@@ -154,6 +163,12 @@ float UNBCharacterStatComponent::GetHPRatio() const
 	NBCHECK(CurrentStatData != nullptr, 0.0f);
 
 	return (CurrentStatData->MaxHP < KINDA_SMALL_NUMBER) ? 0.0f : (CurrentHP / CurrentStatData->MaxHP);
+}
+float UNBCharacterStatComponent::GetMPRatio() const
+{
+	NBCHECK(CurrentStatData != nullptr, 0.0f);
+
+	return (CurrentStatData->MaxMP < KINDA_SMALL_NUMBER) ? 0.0f : (CurrentMP / CurrentStatData->MaxMP);
 }
 
 float UNBCharacterStatComponent::GetNextExp() const
