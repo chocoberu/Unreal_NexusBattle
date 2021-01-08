@@ -185,9 +185,11 @@ void ANBGunnerCharacter::NormalAttackCheck()
 				DamageEvent, // 데미지 종류
 				GetController(), // 가해자 (컨트롤러)
 				this); // 데미지 전달을 위해 사용한 도구 (액터)
-			// TODO : 타격 파티클 추가
+			
+			// 타격 파티클 생성
+			float dist = FMath::Abs((GetActorLocation() - HitResult.Actor.Get()->GetActorLocation()).Size());
 			HitEffectClass = GetWorld()->SpawnActor<ANBGunnerHitEffect>(ANBGunnerHitEffect::StaticClass(),
-				HitResult.Actor.Get()->GetActorLocation(), HitResult.Actor.Get()->GetActorRotation());
+				GetActorLocation() + GetActorForwardVector() * dist, HitResult.Actor.Get()->GetActorRotation());
 			HitEffectClass->PlayHitEffect();
 		}
 		/*NBLOG(Warning, TEXT("Total Hit Actors : %d"), HitResults.Num());
