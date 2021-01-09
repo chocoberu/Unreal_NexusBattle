@@ -31,6 +31,8 @@ public:
 
 	UFUNCTION() void OnAttackMontageEnded(UAnimMontage* Montage, bool bInterrupted);
 
+	virtual void OnDead();
+
 private:
 	UPROPERTY() class UNBGunnerAnimInstance* GunnerAnim; // 애님 인스턴스
 

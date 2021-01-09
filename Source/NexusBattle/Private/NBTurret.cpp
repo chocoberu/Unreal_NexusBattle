@@ -3,6 +3,7 @@
 
 #include "NBTurret.h"
 #include "NBTurretProjectile.h"
+#include "Components/WidgetComponent.h"
 #include "DrawDebugHelpers.h"
 
 // Sets default values
@@ -14,8 +15,9 @@ ANBTurret::ANBTurret()
 	static ConstructorHelpers::FObjectFinder<USkeletalMesh>
 		SK_TURRET(TEXT("/Game/ParagonProps/Turrets/Turrets_inhibitors/Meshes/Turret_Dark_GDC.Turret_Dark_GDC"));
 
-	GetMesh()->SetRelativeLocationAndRotation(FVector(0.0f, 0.0f, -88.0f), FRotator(0.0f, -90.0f, 0.0f));
+	GetMesh()->SetRelativeLocationAndRotation(FVector(0.0f, 0.0f, -180.0f), FRotator(0.0f, -90.0f, 0.0f));
 	GetMesh()->SetRelativeScale3D(FVector(0.5f, 0.5f, 0.5f));
+	GetCapsuleComponent()->InitCapsuleSize(100.0f, 200.0f);
 
 	if (SK_TURRET.Succeeded())
 	{
@@ -32,14 +34,22 @@ ANBTurret::ANBTurret()
 		GetMesh()->SetAnimInstanceClass(TURRET_ANIM.Class);
 	}
 
+	// HPBar 위치 조정
+	if(HPBarWidget != nullptr)
+		HPBarWidget->SetRelativeLocation(FVector(0.0f, 0.0f, 300.0f));
+
 	// 탐색 관련
 	SearchRange = 500.0f;
+
+	// HP 
+	MaxHP = CurrentHP = 1500.0f;
 }
 
 // Called when the game starts or when spawned
 void ANBTurret::BeginPlay()
 {
 	Super::BeginPlay();
+	CurrentHP = MaxHP;
 	
 	GetWorld()->GetTimerManager().SetTimer(SearchTimerHandle, this, &ANBTurret::SearchEnemy, 5.0f, true);
 	SearchEnemy();
@@ -49,7 +59,7 @@ void ANBTurret::EndPlay(const EEndPlayReason::Type EndPlayReason)
 {
 	Super::EndPlay(EndPlayReason);
 
-	GetWorld()->GetTimerManager().ClearTimer(SearchTimerHandle);
+	ClearTimer();
 }
 
 // Called every frame
@@ -64,6 +74,14 @@ void ANBTurret::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
+}
+
+float ANBTurret::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
+{
+	float FinalDamage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
+
+	
+	return FinalDamage;
 }
 
 void ANBTurret::SearchEnemy()
@@ -121,12 +139,23 @@ void ANBTurret::SearchEnemy()
 
 			// TODO : 포탑 muzzle 부분에서 생성되도록 수정
 			ProjectileClass = GetWorld()->SpawnActor<ANBTurretProjectile>(ANBTurretProjectile::StaticClass(),
-				GetActorLocation() + GetActorForwardVector() * 5.0f, GetActorRotation());
-			ProjectileClass->ShotToTarget(HitResult.Actor.Get());
+				GetActorLocation() + GetActorForwardVector() * 10.0f, GetActorRotation());
+			ProjectileClass->ShotToTarget(HitResult.Actor.Get(), GetController());
 		}
 		
 	}
 	else
 		NBLOG(Warning, TEXT("No Target"));
 }
+void ANBTurret::OnDead()
+{
+	Super::OnDead();
+	SetActorEnableCollision(true);
+	ClearTimer();
+	NBLOG(Warning, TEXT("Turret Dead, Clear Timer Called"));
+}
 
+void ANBTurret::ClearTimer()
+{
+	GetWorld()->GetTimerManager().ClearTimer(SearchTimerHandle);
+}

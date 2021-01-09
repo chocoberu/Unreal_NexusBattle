@@ -32,6 +32,8 @@ public:
 
 	// 경험치 추가
 	UFUNCTION() void AddExp(float NewExp);
+
+	virtual void OnDead();
 protected:
 	// 이동 관련 벡터 변수
 	FVector DirectionToMove = FVector::ZeroVector;

@@ -32,6 +32,8 @@ public:
 	float GetHPRatio();
 
 	FOnHPChangedDelegate OnHPChanged;
+
+	virtual void OnDead();
 protected:
 	UPROPERTY(VisibleAnywhere, Category = UI) class UWidgetComponent* HPBarWidget; // HP Bar
 

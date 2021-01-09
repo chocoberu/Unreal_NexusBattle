@@ -32,6 +32,8 @@ public:
 	virtual void SetMyTeam(ETeam NewTeam) { MyTeam = NewTeam; }
 	ECharacterState GetCharacterState() { return CharacterState; }
 	void SetCharacterState(ECharacterState NewState) { CharacterState = NewState; }
+
+	virtual void OnDead();
 protected:
 	
 	// ÆÀ °ü·Ã

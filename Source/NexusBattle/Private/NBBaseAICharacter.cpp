@@ -2,6 +2,7 @@
 
 
 #include "NBBaseAICharacter.h"
+#include "NBBasePlayerCharacter.h"
 #include "Components/WidgetComponent.h"
 #include "NBMinionWidget.h"
 
@@ -58,7 +59,36 @@ void ANBBaseAICharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 
 float ANBBaseAICharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
-	return Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
+	float FinalDamage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
+
+	CurrentHP = FMath::Clamp<float>(CurrentHP - FinalDamage, 0.0f, MaxHP);
+
+	NBLOG(Warning, TEXT("BaseAICharacter Current HP : %f"), CurrentHP);
+
+	OnHPChanged.Broadcast();
+	// 테스트 코드
+	// TODO : hpbar, 공격 추가, 팀
+	if (CurrentHP <= 0.0f)
+	{
+		OnDead();
+		// 플레이어가 죽인 경우 경험치 추가
+
+		// 데미지 유발자에게 경험치 주기
+		// TODO : 주변 플레이어에게 경험치 차등 분배 추가
+		ANBBasePlayerCharacter* Player = Cast<ANBBasePlayerCharacter>(DamageCauser);
+		if (Player != nullptr)
+		{
+			Player->AddExp(DropExp);
+		}
+	}
+	return FinalDamage;
+}
+
+void ANBBaseAICharacter::OnDead()
+{
+	Super::OnDead();
+	SetActorEnableCollision(false);
+	HPBarWidget->SetHiddenInGame(true);
 }
 
 float ANBBaseAICharacter::GetHPRatio()

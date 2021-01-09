@@ -23,8 +23,8 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	// 구체 콜리전 컴포넌트
-	UPROPERTY(VisibleDefaultsOnly, Category = Projectile) USphereComponent* CollisionComponent;
+	// 콜리전 컴포넌트
+	UPROPERTY(VisibleDefaultsOnly, Category = Projectile) UCapsuleComponent* CollisionComponent;
 
 	// 파티클 관련
 	UPROPERTY(VisibleAnywhere, Category = Particle) UParticleSystemComponent* ProjectileParticleSystem;
@@ -33,11 +33,14 @@ public:
 	UFUNCTION()
 		void OnOverlapBegin(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& Hit);
 
+	UFUNCTION()	void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit);
 
-	void ShotToTarget(class AActor* Target);
+
+	void ShotToTarget(class AActor* Target, class AController* Controller);
 	void SetHitParticle();
 	
-	class AActor* TargetActor;
+	UPROPERTY(VisibleAnywhere, Category = Target) class AActor* TargetActor;
+	UPROPERTY(VisibleAnywhere, Category = Target) class AController* TargetController;
 
-	float Speed = 500.0f;
+	float Speed;
 };

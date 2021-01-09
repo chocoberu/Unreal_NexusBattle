@@ -10,7 +10,7 @@ ANBTurretProjectile::ANBTurretProjectile()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	CollisionComponent = CreateDefaultSubobject<USphereComponent>(TEXT("SphereComponent"));
+	CollisionComponent = CreateDefaultSubobject<UCapsuleComponent>(TEXT("CapsuleComponent"));
 	ProjectileParticleSystem = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("ProjectileParticle"));
 	
 	// 파티클 시스템
@@ -29,15 +29,21 @@ ANBTurretProjectile::ANBTurretProjectile()
 		HitParticle = PT_HIT_PARTICLE.Object;
 	}
 
-	RootComponent = CollisionComponent;
-	ProjectileParticleSystem->SetupAttachment(RootComponent);
+	RootComponent = ProjectileParticleSystem;
+	CollisionComponent->SetupAttachment(RootComponent);
 
 	// 구체의 콜리전 반경을 설정합니다.
-	CollisionComponent->InitSphereRadius(20.0f);
+	CollisionComponent->InitCapsuleSize(20.0f, 50.0f);
+	CollisionComponent->SetRelativeLocationAndRotation(FVector(80.0f, 0.0f, 0.0f), FRotator(90.0f, 0.0f, 0.0f));
 	CollisionComponent->SetCollisionProfileName(TEXT("Projectile"));
-	//CollisionComponent->OnComponentHit.AddDynamic(this, &ANBTurretProjectile::OnHit);
+	CollisionComponent->SetNotifyRigidBodyCollision(true);
+	CollisionComponent->OnComponentHit.AddDynamic(this, &ANBTurretProjectile::OnHit);
 	CollisionComponent->OnComponentBeginOverlap.AddDynamic(this, &ANBTurretProjectile::OnOverlapBegin);
-	ProjectileParticleSystem->SetRelativeLocation(FVector(-80.0f, 0.0f, 0.0f));
+	/*ProjectileParticleSystem->SetNotifyRigidBodyCollision(true);
+	ProjectileParticleSystem->SetCollisionProfileName(TEXT("Projectile"));
+	ProjectileParticleSystem->OnComponentHit.AddDynamic(this, &ANBTurretProjectile::OnHit);*/
+
+	Speed = 1000.0f;
 }
 
 // Called when the game starts or when spawned
@@ -51,6 +57,10 @@ void ANBTurretProjectile::BeginPlay()
 void ANBTurretProjectile::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	if (TargetActor != nullptr && TargetActor->GetActorEnableCollision() == false)
+	{
+		Destroy();
+	}
 
 	if (TargetActor != nullptr && ProjectileParticleSystem->IsActive())
 	{
@@ -62,27 +72,37 @@ void ANBTurretProjectile::Tick(float DeltaTime)
 }
 void ANBTurretProjectile::OnOverlapBegin(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& Hit)
 {
-	if (OtherActor != TargetActor)
+	if (TargetActor != OtherActor)
 		return;
-	NBLOG(Warning, TEXT("OnHit() Call"));
+	NBLOG(Warning, TEXT("OnOverlapBegin() Call : Hit Actor : %s"), *OtherActor->GetName());
 	// 총알의 속도를 0으로 설정
 	Speed = 0.0f;
 	SetActorEnableCollision(false); // 충돌 비활성화
 	SetHitParticle();
 
 	// TODO : 데미지 적용
-	
+	FDamageEvent DamageEvent;
+	OtherActor->TakeDamage(20.0f, DamageEvent, nullptr, this);
 }
-void ANBTurretProjectile::ShotToTarget(class AActor* Target)
+void ANBTurretProjectile::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit)
+{
+	NBLOG(Warning, TEXT("OnHit() Call"));
+
+	Speed = 0.0f;
+	SetHitParticle();
+}
+void ANBTurretProjectile::ShotToTarget(class AActor* Target, AController* Controller)
 {
 	if (Target == nullptr)
 		return;
 	TargetActor = Target;
+	TargetController = Controller;
 	ProjectileParticleSystem->Activate(true);
 }
 void ANBTurretProjectile::SetHitParticle()
 {
 	if(HitParticle != nullptr)
 		ProjectileParticleSystem->SetTemplate(HitParticle);
+	SetActorEnableCollision(false); // 충돌 비활성화
 	SetLifeSpan(1.0f);
 }

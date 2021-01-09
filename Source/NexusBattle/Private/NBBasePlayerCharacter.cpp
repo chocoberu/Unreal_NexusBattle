@@ -117,6 +117,12 @@ float ANBBasePlayerCharacter::TakeDamage(float DamageAmount, FDamageEvent const&
 	return FinalDamage;
 }
 
+void ANBBasePlayerCharacter::OnDead()
+{
+	Super::OnDead();
+
+}
+
 void ANBBasePlayerCharacter::UpDown(float NewAxisValue)
 {
 	DirectionToMove.X = NewAxisValue;

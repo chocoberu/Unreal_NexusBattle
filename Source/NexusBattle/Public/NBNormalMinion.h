@@ -38,6 +38,8 @@ public:
 	UFUNCTION()
 		void OnAttackMontageEnded(UAnimMontage* Montage, bool bInterrupted);
 
+	virtual void OnDead();
+
 private:
 	UPROPERTY() class UNBMinionAnimInstance* MinionAnim; // 애님 인스턴스
 	//UPROPERTY(VisibleAnywhere, Category = UI) class UWidgetComponent* HPBarWidget; // HP Bar

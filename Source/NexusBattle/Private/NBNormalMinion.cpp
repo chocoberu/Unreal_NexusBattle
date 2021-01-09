@@ -132,41 +132,30 @@ float ANBNormalMinion::TakeDamage(float DamageAmount, FDamageEvent const& Damage
 {
 	float FinalDamage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 
-	CurrentHP = FMath::Clamp<float>(CurrentHP - FinalDamage, 0.0f, 100.0f);
-
-	NBLOG(Warning, TEXT("Minion Current HP : %f"), CurrentHP);
-	
-	if (MinionAIController != nullptr)
+	if (MinionAIController != nullptr && EventInstigator != nullptr)
 	{
 		// 타격한 상대를 타겟으로
 		MinionAIController->SetAttackInstigator(EventInstigator->GetCharacter());
 	}
-	OnHPChanged.Broadcast();
+	
 	// 테스트 코드
 	// TODO : hpbar, 공격 추가, 팀
 	if (CurrentHP <= 0.0f)
 	{
-		SetCharacterState(ECharacterState::Dead);
-		MinionAnim->SetDeadAnim();
-		MinionAIController->StopAI();
-		SetActorEnableCollision(false);
-		HPBarWidget->SetHiddenInGame(true);
-		
-		// TODO : 미니언 삭제 (오브젝트 풀링 적용)
-		SetLifeSpan(3.0f);
-
-		// 데미지 유발자에게 경험치 주기
-		// TODO : 주변 플레이어에게 경험치 차등 분배 추가
-
-		// 플레이어가 죽인 경우 경험치 추가
-		ANBBasePlayerCharacter* Player = Cast<ANBBasePlayerCharacter>(DamageCauser);
-		if (Player != nullptr)
-		{
-			Player->AddExp(DropExp);
-		}
-		
+		OnDead();
 	}
 	return FinalDamage;
+}
+
+void ANBNormalMinion::OnDead()
+{
+	Super::OnDead();
+	MinionAnim->SetDeadAnim();
+	MinionAIController->StopAI();
+	
+	// TODO : 미니언 삭제 (오브젝트 풀링 적용)
+	SetLifeSpan(3.0f);
+
 }
 void ANBNormalMinion::SetMyTeam(ETeam NewTeam)
 {

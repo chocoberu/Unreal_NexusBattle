@@ -49,5 +49,9 @@ void ANBBaseCharacter::PostInitializeComponents()
 	Super::PostInitializeComponents();
 
 }
+void ANBBaseCharacter::OnDead()
+{
+	SetCharacterState(ECharacterState::Dead);
 
+}
 

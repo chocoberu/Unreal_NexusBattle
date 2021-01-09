@@ -81,11 +81,7 @@ void ANBGunnerCharacter::PostInitializeComponents()
 
 	CharacterStat->OnHPIsZero.AddLambda([this]() -> void
 		{
-			NBLOG(Warning, TEXT("Gunner HP is zero"));
-			SetCharacterState(ECharacterState::Dead);
-			GunnerAnim->SetDeadAnim();
-			SetActorEnableCollision(false);
-			HPBarWidget->SetHiddenInGame(true);
+			OnDead();
 		});
 }
 
@@ -115,6 +111,14 @@ void ANBGunnerCharacter::RocketDash()
 
 }
 
+void ANBGunnerCharacter::OnDead()
+{
+	Super::OnDead();
+	NBLOG(Warning, TEXT("Gunner HP is zero"));
+	GunnerAnim->SetDeadAnim();
+	SetActorEnableCollision(false);
+	HPBarWidget->SetHiddenInGame(true);
+}
 void ANBGunnerCharacter::OnAttackMontageEnded(UAnimMontage* Montage, bool bInterrupted)
 {
 	if (Montage != GunnerAnim->GetNormalAttackMontage())
